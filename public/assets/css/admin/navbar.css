@@ -1,0 +1,15 @@
+.nav-search{
+    font-size: 15px;
+    width: 300px;
+    background-color: white;
+}
+.nav-search{
+	font-family: "Roboto", sans-serif;
+    border: 2px solid #7367f0;
+}
+.nav-search-results{
+	font-family: "Roboto", sans-serif;
+}
+a,span,p,div{
+    font-family: "Roboto", sans-serif;
+}

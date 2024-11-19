@@ -1,0 +1,138 @@
+<html>
+	<head>
+		<style>
+		
+			@import url('https://fonts.googleapis.com/css?family=Alice:300,400,600,700&&display=swap');
+
+			/*Required CSS*/
+			svg.radial-progress{
+				height:auto;
+				max-width:240px;
+				padding:0;
+				transform:rotate(-90deg);
+				width:100%;
+				background-color:transparent;
+				border-radius:50%;
+			}
+			section.svg-container svg.radial-progress:nth-child(even){margin: 0 15px;}
+			svg.radial-progress circle{
+				fill:transparent;
+				stroke:#fff;
+			}
+			svg.radial-progress circle.bar-static{
+				stroke-width:2px;
+				stroke:#eeecf3; !important
+			}
+			svg.radial-progress circle.bar--animated{
+				stroke-dasharray:219.91148575129;
+				stroke:#3dd68b; /* Bold progress bar */
+				stroke-dashoffset:219.91148575129;
+				stroke-width:3px;
+				stroke-linecap:round;
+			}
+			svg.radial-progress text{
+				fill:#6e6b7b;
+				font-family:Roboto;
+				font-size:16px;
+				font-weight:700;
+				text-anchor:middle;
+			}
+
+			/*For CodePen*/
+			section.svg-container{
+				width:52%;
+				max-width:100%;
+				display:flex;
+				align-items:center;
+				justify-content:space-evenly;
+				min-height:80vh;
+			}
+
+		
+		</style>
+	</head>
+	<body>
+	
+	
+		<section class="svg-container">
+			<svg class="radial-progress" data-countervalue="50" viewBox="0 0 80 80">
+			  <circle class="bar-static" cx="40" cy="40" r="35"></circle>
+			  <circle class="bar--animated" cx="40" cy="40" r="35" style="stroke-dashoffset: 217.8;"></circle>
+			  <text class="countervalue start" x="50%" y="57%" transform="matrix(0, 1, -1, 0, 80, 0)">50</text>
+			</svg>
+		</section>
+
+	
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js" ></script>
+	<script>
+	
+	function radial_animate() { 
+          $('svg.radial-progress').each(function( index, value ) { 
+
+              $(this).find($('circle.bar--animated')).removeAttr( 'style' );    
+              // Get element in Veiw port
+              var elementTop = $(this).offset().top;
+              var elementBottom = elementTop + $(this).outerHeight();
+              var viewportTop = $(window).scrollTop();
+              var viewportBottom = viewportTop + $(window).height();
+              
+              if(elementBottom > viewportTop && elementTop < viewportBottom) {
+                  var percent = $(value).data('countervalue');
+                  var radius = $(this).find($('circle.bar--animated')).attr('r');
+                  var circumference = 2 * Math.PI * radius;
+                  var strokeDashOffset = circumference - ((percent * circumference) / 100);
+                  $(this).find($('circle.bar--animated')).animate({'stroke-dashoffset': strokeDashOffset}, 2800);
+              }
+          });
+      }
+	
+	var $window = $(window);
+	function check_if_in_view(){
+	
+		$('.countervalue').each(function(){
+		  if ($(this).hasClass('start')){
+			  var elementTop = $(this).offset().top;
+			  var elementBottom = elementTop + $(this).outerHeight();
+
+			  var viewportTop = $(window).scrollTop();
+			  var viewportBottom = viewportTop + $(window).height();
+
+			  if (elementBottom > viewportTop && elementTop < viewportBottom) {
+						$(this).removeClass('start');
+						$('.countervalue').text();
+						var myNumbers = $(this).text();
+						if (myNumbers == Math.floor(myNumbers)) {
+							$(this).animate({
+								Counter: $(this).text()
+							}, {
+								duration: 2800,
+								easing: 'swing',
+								step: function(now) {
+									$(this).text(Math.ceil(now)  + '%');                                
+								}
+							});
+						} else {
+							$(this).animate({
+								Counter: $(this).text()
+							}, {
+								duration: 2800,
+								easing: 'swing',
+								step: function(now) {                                
+									$(this).text(now.toFixed(2)  + '$'); 
+								}
+							});
+						}
+
+						radial_animate();
+					}
+		  }
+		});
+		
+	}
+
+		
+	$window.on('scroll', check_if_in_view);
+	$window.on('load', check_if_in_view);
+</script>
+	</body>
+</html>
