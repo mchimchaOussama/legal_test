@@ -4,23 +4,20 @@
 
 
 <head>
-<meta name="csrf-token" content="{{ csrf_token() }}">
-
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <style>
         .border-danger {
             border: 1px solid red;
         }
-
         .custom-input {
-        height: 40px; /* Hauteur des inputs à 100 pixels */
-    }
-    .custom-input-btn{
-        height: 30px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
+            height: 40px;
+        }
+        .custom-input-btn{
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
         .tf-btn.primary {
             background-color: #ED2027; /* Couleur normale */
             color: white; /* Couleur du texte */
@@ -61,7 +58,7 @@
             margin: 0;
             max-width: 1000px; /* Adjust width as needed */
             width: 100%; /* Ensure it fits the screen width */
-       
+        
             z-index: 1055; /* Ensure it appears above other content */
         }
         .custom-modal-position .modal-content {

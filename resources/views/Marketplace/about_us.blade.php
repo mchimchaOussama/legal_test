@@ -101,6 +101,10 @@
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
 
+                                                <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                Commandez en Quantité
+                                                </a></li>
+
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
                                                 @if(session()->has('client_hom'))

@@ -304,6 +304,10 @@
 
                                 <li> <a href="{{route('get.faq')}}" class="caption-1 text-variant-2">FAQ</a> </li>
 
+                                <li class=""><a href="{{route('marketplace.demandes')}}">
+                                Commandez en Quantité
+                                </a></li>
+
                                 <li> <a href="#" class="caption-1 text-variant-2">Contact</a> </li>
 
                             </ul>

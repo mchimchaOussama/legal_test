@@ -59,7 +59,7 @@
 
             <div class="modal-footer pt-0 w-100 d-flex justify-content-between align-items-center">
                 <div class="statut-container">
-                    <select value="{{ $statut }}" class="custom-select statut
+                    <select @if($prix <= 0) disabled @endif value="{{ $statut }}" class="custom-select statut
                         @if($statut === 1)
                             border-success text-success
                         @elseif($statut === 0)

@@ -20,7 +20,7 @@ class Index extends Component
     use WithFileUploads;
     use WithPagination;
     public $deleted_id = "";
-    public $entreprise, $nom_prenom, $email, $tel, $quantite, $date, $thematique, $departement, $description, $statut, $target_id;
+    public $entreprise, $nom_prenom, $email, $tel, $quantite, $date, $thematique, $departement, $description, $statut, $target_id, $prix;
 
     public $excel, $progress = 0, $commande_id = "";
 
@@ -70,6 +70,7 @@ class Index extends Component
         $this->description  = $commande->description;
         $this->statut       = $commande->statut;
         $this->target_id    = $commande->id;
+        $this->prix         = $commande->prix;
     }
 
 
@@ -140,13 +141,13 @@ class Index extends Component
             $client = $cmd->client;
 
             Mail::send('mail.commandeAgre', ['cmd' => $cmd], function ($message) use ($cmd) {
-                $message->to($cmd->client->email)
-                        ->subject('Votre commande a été Accéptée');
+                $message->to($cmd->client->email)->subject('Votre commande a été Accéptée');
             });
 
         }
 
         return;
+
     }
 
 

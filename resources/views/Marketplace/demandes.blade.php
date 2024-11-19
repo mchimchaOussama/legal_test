@@ -54,7 +54,11 @@
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
 
-                                                <li class="current"><a href="{{route('get.contact')}}">Contact</a>
+                                                <li class="current"><a href="{{route('marketplace.demandes')}}">
+                                                Commandez en Quantité
+                                                </a></li>
+
+                                                <li class=""><a href="{{route('get.contact')}}">Contact</a>
                                                 </li>
                         
 

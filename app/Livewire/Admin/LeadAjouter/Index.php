@@ -54,11 +54,10 @@ class Index extends Component
     }
 
 
-
     public $step = 1; // Initialize with step 1
     public $maxSteps = 5;
 
-    // Function to move to the next step
+
     public function nextSection()
     {
         if($this->step < $this->maxSteps){
@@ -66,7 +65,7 @@ class Index extends Component
         }
     }
 
-    // Function to move to the previous step
+
     public function previousSection()
     {
         if($this->step > 1){
@@ -174,6 +173,7 @@ class Index extends Component
 
     }
 
+
     public function ajouter_lead_step4()
     {
             $this->validate(
@@ -214,7 +214,6 @@ class Index extends Component
                 ///////// Publicite //////////
                 "prix"                => 'required|numeric',
                 "adresse_reelle"      => 'required',
-
             ],
             [
                 'required'          => 'Ce champ est obligatoire',
@@ -268,7 +267,7 @@ class Index extends Component
             'prospect_id'       => $this->prospect_id->id,
             "description"       => $this->description,
             "code_postale_id"   => $code_postale_id,
-            "maison"             => $this->maison,
+            "maison"            => $this->maison,
             "interetAmeliorationHabitat"  => $this->interetAmeliorationHabitat
         ]);
 
@@ -285,7 +284,6 @@ class Index extends Component
         return $this->dispatch("toast-success"); 
 
     }
-
 
 
     public function render()
