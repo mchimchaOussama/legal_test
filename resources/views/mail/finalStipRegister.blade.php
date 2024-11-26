@@ -25,7 +25,16 @@
                     <!-- Message Body -->
                     <tr>
                         <td align="center" style="padding: 10px 20px; font-size: 16px; color: #333;">
-                        Votre compte a été  @if($user->firstActivateCompte > 1 ) réactiver   @elseif ($user->firstActivateCompte <= 1) activé @endif avec succès !
+                            Nous avons le plaisir de vous informer que votre compte sur **Lead & Boost** est désormais  @if($user->firstActivateCompte > 1 ) réactiver   @elseif ($user->firstActivateCompte <= 1) activé @endif <br>
+
+                            Vous pouvez dès maintenant accéder à votre espace client pour consulter les leads
+                            disponibles, gérer vos préférences, et commencer à explorer les opportunités adaptées à
+                            votre secteur. 
+                            <br>
+                            Merci de votre confiance et à bientôt sur Lead & Boost !  <br><br>
+
+                            Bien cordialement,
+                            L’équipe Lead & Boost
                         </td>
                     </tr>
                     <!-- Button -->

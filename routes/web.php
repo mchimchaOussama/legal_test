@@ -14,9 +14,14 @@ use App\Http\Controllers\MailingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PayPalController;
+use App\Http\Controllers\importthematiqueController;
+
+use Carbon\Carbon;
 
 
 use App\Models\Commande;
+use App\Models\Lead;
+use App\Models\Thematique;
 
 ///////////// Accueil //////////////
 use App\Livewire\Admin\Accueil as Admin_Acceuil;
@@ -127,6 +132,7 @@ Route::middleware([checkAuth::class, Superviseur::class])->group(function(){
 
     //////// Client //////////
     Route::get('/admin/client', Client_Index::class)->name('admin.client');
+    
     Route::get('/admin/client/details/{leadId}', Client_Show_Index::class)->name('admin.client.show');
 
     //////// Statistics ////////
@@ -165,7 +171,8 @@ Route::middleware([checkAuth::class])->group(function(){
 
     Route::get('/admin/lead-ajouter-enr', Lead_Ajouter_Enr::class)->name('admin.lead-ajouter-enr');
 
-///////////////////////Modifier Lead//////////////////////////////////////////////////////////////////
+
+    ///////////////////////Modifier Lead//////////////////////////////////////////////////////////////////
     Route::get('/admin/lead-modifier/{leadId}', LeadModifier_Index::class)->name('admin.lead-modifier');
     Route::get('/admin/lead-modifier/enr/{leadId}', LeadModifier_Enr::class)->name('admin.lead-modifier-enr');
     Route::get('/admin/lead-modifier/formation-b2c/{leadId}', LeadModifier_Informatique::class)->name('admin.lead-modifier-formation.b2c');
@@ -193,7 +200,7 @@ Route::get('/pypal/get/page', [pypalController::class,'index' ])->name('pypal.pa
 
 Route::get("/", [HomeController::class, "get_home"])->name("get.home");
 Route::get('/get-leads', [HomeController::class, 'getLeads']);
-///////////marketplace///////////////////////////////
+
 
 Route::get("/marketplace/marketplace", [HomeController::class, "marketplace_get"])->name("get.marketplace");
 Route::post("/marketplace/marketplace", [HomeController::class, "marketplace_filter"])->name("post.marketplace");
@@ -219,7 +226,7 @@ Route::get("/marketplace/contact", [HomeController::class, "contact"])->name("ge
 
 Route::post('/send-contact', [HomeController::class, 'sendContact'])->name('send.contact');
 
-///////////////////dashbord//////////////////////////////////////////
+///////////////////  Dashbord  ////////////////////////
 Route::get("/dashbord/client", [clientDashbordController::class, "dashbord_get"])->name("get.dashbord.client");
 
 Route::get('/fetch-leads', [clientDashbordController::class, 'fetchLeads']);
@@ -261,22 +268,19 @@ Route::get('/checkout', [PaymentController::class, 'checkout'])->name('checkout'
 Route::post('/CreateCheckout/',[PaymentController::class, 'createCheckoutSession'])->name('payment.createCheckoutSession');
 Route::get('/payment/successStripe', [PaymentController::class, 'successStripe'])->name('payment.successStripe');
 
-//Coupon
-Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('coupon.apply');
 
+Route::post('/apply-coupon', [CartController::class, 'applyCoupon'])->name('coupon.apply');
 
 
 Route::get("/boxtest", function(){
     return view("boxtest");
 });
 
-//detail factures achetés
 
 Route::get('/dashbord/client/details/{idPayment}',[clientDashbordController::class, 'detailPayment'])->name('invoice.details');
 
 Route::get('/download-invoice/{invoiceId}', [clientDashbordController::class, 'downloadInvoice'])->name('downloadInvoice');
 
-// In web.php
 Route::get('/fetch-invoice-details', [clientDashbordController::class, 'fetchInvoiceDetails'])->name('fetchInvoiceDetails');
 
 Route::post('/fetch-leads', [clientDashbordController::class, 'fetchleads'])->name('fetch.leads');
@@ -289,16 +293,10 @@ Route::get("/commandez-leads-en-quantite", [clientDashbordController::class, "de
 
 Route::post("/commande-post", [clientDashbordController::class, "demandez_devis_post"])->name("marketplace.commande-post");
 
-
-
-Route::get("/test", function(){
-
-    Commande::where("id", "!=", "")->update(["excel_path"  =>  null]);
-
-});
-
-
 Route::get("/dashboard/commandes", [clientDashbordController::class, "client_commandes"])->name('marketplace.client-commandes');
 
-
 Route::get("/dashboard/commande/download/{id}", [clientDashbordController::class, "client_commande_download"])->name('marketplace.client-commande-download');
+
+Route::post('/import', [importthematiqueController::class, 'import'])->name('import');
+
+Route::get("/dashboard/commandes", [HomeController::class, "get_commandes"])->name("dashboard.client-commandes");

@@ -45,7 +45,7 @@
                               <select name="theme" id="theme" wire:model="theme" class="form-control  @error('theme') is-invalid @enderror" > 
                                 <option value="" selected>saisie le théme</option>
                                 <option value="enrRenouvelabl">energie renouvlable</option>
-                                <option value="enr">energie</option>
+                                <option value="enr">energie gaz /électrique</option>
                                 <option value="telecom">telecom</option>
                                 <option value="formationB2B">formation B2B</option>
                                 <option value="formationB2C">formation B2C</option>

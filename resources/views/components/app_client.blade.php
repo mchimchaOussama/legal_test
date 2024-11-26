@@ -47,10 +47,10 @@
 
 
     <!-- Icons -->
-<link rel="stylesheet" href="{{ asset('assetsMarketplace/assets/fonts/font-icons.css') }}">
-<link rel="stylesheet" href="{{ asset('assetsMarketplace/assets/css/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assetsMarketplace/assets/css/jqueryui.min.css') }}">
-<link rel="stylesheet" href="{{ asset('assetsMarketplace/assets/css/styles.css') }}">
+<link rel="stylesheet" href="{{ asset('assetsMarketplace/fonts/font-icons.css') }}">
+<link rel="stylesheet" href="{{ asset('assetsMarketplace/css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assetsMarketplace/css/jqueryui.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assetsMarketplace/css/styles.css') }}">
 
 <!-- Favicon and Touch Icons -->
 <link rel="shortcut icon" href="{{ asset('assetsMarketplace/assets/images/logo/favicon.png') }}">
@@ -82,16 +82,19 @@
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/shortcodes.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/animation_heading.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/main.js') }}"></script>
+
 <script src="{{ asset('assetsMarketplace/js/map-single.js') }}"></script>
 <script src="{{ asset('assetsMarketplace/js/marker.js') }}"></script>
 <script src="{{ asset('assetsMarketplace/js/infobox.min.js') }}"></script>
+<!--
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/chart.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/chart-init.js') }}"></script>
 <script type="text/javascript" src="{{ asset('assetsMarketplace/js/jqueryui.min.js') }}"></script>
+-->
 
 <!-- Dashboard Menu -->
-<script type="text/javascript" src="{{ asset('js/dashboard-menu.js') }}"></script>
-<script type="text/javascript" src="{{ asset('js/dashboard-menu.min.js') }}"></script>
+ <!--<script type="text/javascript" src="{{ asset('assetsMarketplace/js/dashboard-menu.js') }}"></script>
+ <script type="text/javascript" src="{{ asset('assetsMarketplace/js/dashboard-menu.min.js') }}"></script>-->
 
 
 

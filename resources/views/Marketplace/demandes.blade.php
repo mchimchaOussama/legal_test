@@ -41,6 +41,7 @@
                                                 <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
 
+
                                                     </ul>
                                                 </li>
 
@@ -67,7 +68,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>                                          
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                  
                                                         <li> 
                                                         <a href="#">
@@ -94,9 +95,9 @@
                                             @if(session()->has('client_hom'))
                                             
                                             @else
-                                                <li><a href="#modalLogin" data-bs-toggle="modal">Login</a></li>
+                                                <li><a href="#modalLogin" data-bs-toggle="modal">Se connecter</a></li>
                                                 <li>/</li>
-                                                <li><a href="#modalRegister" data-bs-toggle="modal">Register</a></li>
+                                                <li><a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a></li>
                                             @endif
                                         </ul>
                                         @if (session('cart') && count(session('cart')) > 0)
@@ -129,9 +130,9 @@
                         
                         <div class="bottom-canvas">
                             <div class="login-box flex align-items-center">
-                                <a href="#modalLogin" data-bs-toggle="modal">Login</a>
+                                <a href="#modalLogin" data-bs-toggle="modal">Se connecter" </a>
                                 <span>/</span>
-                                <a href="#modalRegister" data-bs-toggle="modal">Register</a>
+                                <a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a>
                             </div>
                             <div class="menu-outer"></div>
                             <div class="button-mobi-sell">
@@ -168,7 +169,7 @@
             <section class="flat-section flat-contact pt-5">
                 <div class="container">
                     <div class="row">
-                        <div class="col-lg-8">
+                        <div class="col-lg-10">
                             <div class="contact-content">
                                 <h5>Commander</h5>
                                 <div class="w-100 mb-5">
@@ -198,6 +199,18 @@
                                         </fieldset>
                                     </div>
                                     <div class="box grid-2">
+                                        <fieldset>
+                                            <label>Thématique:</label>
+                                            <input type="text" class="form-control style-1 @error('thematique') border-danger @enderror" name="thematique" id="thematique" required value='' placeholder="saisie la thématique">
+                                        </fieldset>
+
+
+                                        <fieldset>
+                                            <label>Département:</label>
+                                            <input type="text" class="form-control style-1 @error('departement') border-danger @enderror" name="departement" id="departement" required value='' placeholder="saisie le département">
+                                        </fieldset>
+                                    </div>
+                                    <div class="box grid-2">
 
                                         <fieldset>
                                             <label for="subject">Nombre de leads:</label>
@@ -209,21 +222,10 @@
                                             <input type="date" class="form-control style-1 @error('date_livraison') border-danger @enderror" name="date_livraison" id="date_livraison" required autocomplete="off" placeholder="Date souhaitée pour la livraison" value="{{ old('date_livraison') }}">
                                         </fieldset>
                                     </div>
-                                    <div class="box grid-2">
-                                        <fieldset>
-                                            <label for="subject">Thématique:</label>
-                                            <input type="text" class="form-control style-1 @error('thematique') border-danger @enderror" name="thematique" id="thematique" required placeholder="" autocomplete="off" value="{{ old('thematique') }}">
-                                        </fieldset>
-
-                                        <fieldset>
-                                            <label for="subject">Département:</label>
-                                            <input type="text" class="form-control style-1 @error('departement') border-danger @enderror" name="departement" id="departement" required placeholder="" autocomplete="off" value="{{ old('departement') }}">
-                                        </fieldset>
-                                    </div>
 
                                     <fieldset class="box">
                                         <label for="message">Description:</label>
-                                        <textarea name="description" class="form-control @error('message') border-danger @enderror" cols="30" rows="20" placeholder="Décrivez votre commande..."  required>{{ old('message') }}</textarea>
+                                        <textarea name="description" class="form-control @error('message') border-danger @enderror" cols="30" rows="30" placeholder="Décrivez votre commande..."  required>{{ old('message') }}</textarea>
                                     </fieldset>
                                     
                                     <div class="send-wrap">
@@ -231,19 +233,6 @@
                                     </div>
 
                                 </form>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="contact-info">
-                            <img src="{{ asset('assetsMarketplace/images/logoSansBaground.png') }}" alt="Contact Image" class="img-fluid mb-3">
-
-                                <h5>Contact </h5>
-                                <ul>
-                                    <li class="box">
-                                        <div class="text-1 title">Infomation:</div>
-                                        <p class="p-16 text-variant-1">test@gmail.com</p>
-                                    </li>
-                                </ul>
                             </div>
                         </div>
                     </div>
@@ -303,7 +292,7 @@
                             <div class="fw-7 text-white">Top Thematique</div>
                             <ul class="mt-10 navigation-menu-footer">
                                 @foreach($thematiquesStatistiques as $thematiquesStatistique)
-                                <li> <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">{{$thematiquesStatistique->theme}}</a> </li>
+                                <li>  <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">@if ($thematiquesStatistique->theme =='enr' )  energie gaz /électrique @else {{$thematiquesStatistique->theme}} @endif </a>  </li>
                                 @endforeach
                             </ul>
                         </div>

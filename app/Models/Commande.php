@@ -18,13 +18,21 @@ class Commande extends Model
         "thematique",
         "departement",
         "description",
-        "excel_path"
+        "excel_path",
+        "updated_at",
+        "lead_id"
     ];
 
     
-    public function  client()
+    public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    
+    public function lead()
+    {
+        return $this->hasOne(Lead::class);
     }
 
 

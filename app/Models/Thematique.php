@@ -24,7 +24,8 @@ class Thematique extends Model
         'thematique',
         'type',
         'image',
-        'theme'
+        'theme',
+        'commande'
     ];
 
 

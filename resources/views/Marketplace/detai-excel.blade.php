@@ -1,5 +1,5 @@
 @extends('components.app_client') 
-@section('title', 'Votre panier') 
+@section('title', 'Detai') 
 @section('content')
 
 
@@ -7,6 +7,38 @@
 
 <!DOCTYPE html>
 
+
+<style>
+    .border-danger {
+            border: 1px solid red;
+        }
+
+        .custom-input {
+        height: 40px; /* Hauteur des inputs à 100 pixels */
+    }
+    .custom-input-btn{
+        height: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .tf-btn.primary {
+            background-color: #ED2027; /* Couleur normale */
+            color: white; /* Couleur du texte */
+            border: none; /* Retirer la bordure */
+            padding: 10px; /* Padding pour rendre le bouton plus grand */
+            border-radius: 5px; /* Arrondir les coins */
+            cursor: pointer; /* Change le curseur sur survol */
+        }
+
+        /* Couleur lorsque le bouton est désactivé */
+        .tf-btn.primary:disabled {
+            background-color: #cccccc; /* Couleur désactivée */
+            color: #666666; /* Couleur du texte désactivé */
+            cursor: not-allowed; /* Change le curseur pour indiquer que le bouton est désactivé */
+        }
+</style>
 
 <body class="body">
 
@@ -30,9 +62,6 @@
     <!-- /preload -->
 
     <div id="wrapper">
-        <div id="pagee" class="clearfix">
-            <!-- Main Header -->
-            <div id="wrapper">
         <div id="pagee" class="clearfix">
             <!-- Main Header -->
             <header class="main-header fixed-header">
@@ -81,8 +110,8 @@
 
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
-                                                    <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>                                        
-                                                    <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
+                                                    <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -108,9 +137,9 @@
                                         @if(session()->has('client_hom'))
                                             
                                             @else
-                                                <li><a href="#modalLogin" data-bs-toggle="modal">Login</a></li>
+                                                <li><a href="#modalLogin" data-bs-toggle="modal">Se connecter</a></li>
                                                 <li>/</li>
-                                                <li><a href="#modalRegister" data-bs-toggle="modal">Register</a></li>
+                                                <li><a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a></li>
                                             @endif
                                         </ul>
                                         @if (session('cart') && count(session('cart')) > 0)
@@ -132,21 +161,27 @@
                         </div>
                     </div>
                 </div>
+                                    <!-- Main Menu End-->
+                                </div>
+                               
+                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <!-- End Header Lower -->
-
             
                 <!-- Mobile Menu  -->
                 <div class="close-btn"><span class="icon flaticon-cancel-1"></span></div>    
                 <div class="mobile-menu">
                     <div class="menu-backdrop"></div>                            
                     <nav class="menu-box">
-                        <div class="nav-logo"><a href="index.html"><img src="{{ asset('assetsMarketplace/images/logo/logo%402x.png') }}" alt="nav-logo" width="174" height="44"></a></div>
-                        
+                        <div class="nav-logo"><a href="index.html"><img src="images/logo/logo%402x.png" alt="nav-logo" width="174" height="44"></a></div>
                         <div class="bottom-canvas">
                             <div class="login-box flex align-items-center">
-                                <a href="#modalLogin" data-bs-toggle="modal">Login</a>
+                                <a href="#modalLogin" data-bs-toggle="modal">Se connecter</a>
                                 <span>/</span>
-                                <a href="#modalRegister" data-bs-toggle="modal">Register</a>
+                                <a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a>
                             </div>
                             <div class="menu-outer"></div>
                             <div class="button-mobi-sell">
@@ -170,28 +205,103 @@
             </header>
             <!-- End Main Header -->
             
-
+            <!-- 
+            <section class="flat-location flat-slider-detail-v1">
+                <div class="swiper tf-sw-location" data-preview-lg="2.03" data-preview-md="2" data-preview-sm="2" data-space="20" data-centered="true" data-loop="true">
+                    <div class="swiper-wrapper">
+                        <div class="swiper-slide">
+                            <a href="images/banner/banner-property-1.jpg" data-fancybox="gallery" class="box-imgage-detail d-block">
+                                <img src="images/banner/banner-property-1.jpg" alt="img-property">
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="images/banner/banner-property-3.jpg" data-fancybox="gallery" class="box-imgage-detail d-block">
+                                <img src="images/banner/banner-property-3.jpg" alt="img-property">
+                            </a>
+                        </div>
+                        <div class="swiper-slide">
+                            <a href="images/banner/banner-property-2.jpg" data-fancybox="gallery" class="box-imgage-detail d-block">
+                                <img src="images/banner/banner-property-2.jpg" alt="img-property">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="box-navigation">
+                        <div class="navigation swiper-nav-next nav-next-location"><span class="icon icon-arr-l"></span></div>
+                        <div class="navigation swiper-nav-prev nav-prev-location"><span class="icon icon-arr-r"></span></div> 
+                    </div>
+                    <div class="icon-box">
+                        <a href="#" class="item"><span class="icon icon-map-trifold"></span></a>
+                        <a href="images/banner/banner-property-1.jpg" class="item active" data-fancybox="gallery"><span class="icon icon-images"></span></a>
+                    </div> 
+                </div>
+            </section>
+            -->
 
             <section class="flat-section pt-0 flat-property-detail">
-                <section class="h-100">
-                    <div class="container h-100 py-5">
-                        <section class="h-100 gradient-custom">
-                            <div class="container py-5">
-                            <!-- component -->
-<div class="bg-gray-100 h-screen">
-      <div class="bg-white p-6  md:mx-auto">
-        <div class="text-center">
-            <h3 class="md:text-2xl text-base text-gray-900 font-semibold text-center text-success">Paiement réussi !</h3>
-            <p class="text-gray-600 my-2">Merci d'avoir compléter votre paiement en ligne .</p>
-            <p> Have a great day!  </p>
-            <div class="py-10 text-center"></div>
-        </div>
-    </div>
-  </div>
+                <div class="container">
+                    <div class="header-property-detail">
+                        <div class="content-top d-flex justify-content-between align-items-center">
+                            <div class="box-name">
+                                <h4 class="title link">{{ $detaiLead->commande_details->thematique }} / {{ $detaiLead->commande_details->departement }} / Quantité: {{ $detaiLead->commande_details->nombre_leads }}</h4>
+                            </div>
+                            <div class="box-price d-flex align-items-center">
+                                <h4>€ {{ $detaiLead->prix }}</h4>
+                                <span class="body-1 text-variant-1">/Euro</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-8">
+                            <div class="single-property-element single-property-desc">
+                                <div class="h7 title fw-7">Description</div>
+                                <p class="body-2 text-variant-1">{{ $detaiLead->commande_details->description }}</p>
+                            </div>
+
+
+                            <div class="single-property-element single-property-map">
+                                <div class="h7 title fw-7">Map</div>
+                                <div class="map-container">
+                                    <img src="{{ asset('/assets/images/map-commande.png') }}" class="w-100" />
                                 </div>
-                                
-                         </div>
-                             </section>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="widget-sidebar fixed-sidebar wrapper-sidebar-right">
+                                <div class="widget-box single-property-contact bg-surface">
+                                    <div class="h7 title fw-7">Info Lead</div>
+                                    <div class="box-avatar">
+                                        <div class="rounded">
+                                        <img src="{{ asset('storage/' . $detaiLead->thematique->image) }}" alt="img" style="width: 260px; height: 150px;" class=' px-4' />
+                                        </div> 
+                                    </div>
+                                    <form method="POST" action="{{route('cart_add',['lead'=>$detaiLead,'src'=>'detail'])}}" class="contact-form">
+                                        @csrf
+                                        <div class="ip-group">
+                                            <label for="">Thematique</label>
+                                            <input type="text" placeholder="" class="form-control" value='{{$detaiLead->thematique->theme}}' readonly >
+                                        </div>
+                                        <div class="ip-group">
+                                            <label for="">Departement</label>
+                                            <input type="text" placeholder="" class="form-control" value='{{$detaiLead->departement->departement}}' readonly >
+                                        </div>
+                                        <div class="ip-group">
+                                            <label for="">Ville</label>
+                                            <input type="text" placeholder="" class="form-control" value='{{$detaiLead->ville->ville}}'>
+                                        </div>
+                                        <div class="ip-group mb-4">
+                                            <label for="">Code Postal</label>
+                                            <input type="text" placeholder="" class="form-control" value='{{$detaiLead->code_postale}}'>
+                                        </div>
+                                        <button class="btn btn-primary w-100"> <i class="fas fa-shopping-cart px-2"></i>Ajouter au Panier</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </section>
 
 
@@ -220,10 +330,10 @@
                                 <i class="icon icon-commercial fs-20 text-variant-2"></i>
                                 <p class="text-white"> AK Business Group  FZE   </p>
                             </li>
-                            
+
                             <li class="mt-12 d-flex align-items-center gap-8">
                                 <i class="icon icon-mail fs-20 text-variant-2"></i>
-                                <p class="text-white">contact@smart-konnect.fr</p>
+                                <p class="text-white">test@gmail.com</p>
                             </li>
                           </ul>
                           
@@ -238,8 +348,6 @@
                                 <li> <a href="{{route('get.about_us')}}" class="caption-1 text-variant-2">A Propos</a> </li>
 
                                 <li> <a href="{{route('get.faq')}}" class="caption-1 text-variant-2">FAQ</a> </li>
-                                <li> <a href="{{route('get.contact')}}" class="caption-1 text-variant-2">Contact</a> </li>
-
                             </ul>
                         </div>
                       </div>
@@ -279,16 +387,12 @@
                   <div class="container">
                     <div class="content-footer-bottom">
                         <div class="copyright">© 2024 LEAD & BOOST (Tous droits réservés).</div>
-                     
+
                         <ul class="menu-bottom">
                           <li><a href="https://technologica.ma/" target="_blank">Créé par Technologica</a> </li>
                           <li><span class="text-white" data-bs-toggle="modal" data-bs-target="#termsModal2" style="cursor: pointer;font-size:13px">Conditions d'Utilisation</span></li>
-                        <!--
-                          <li><a href="pricing.html">Privacy Policy</a> </li>
-                          <li><a href="contact.html">Cookie Policy</a> </li>
-                         -->
                         </ul>
-                     
+
                     </div>
                   </div>
                 </div>
@@ -311,6 +415,7 @@
         <div class="modal-content">
             <div class="flat-account bg-surface">
                 <h3 class="title text-center">Se connecter</h3>
+                <div id="success-message" class="text-success mt-1" style="display: none;"></div>
                 <span class="close-modal icon-close2" data-bs-dismiss="modal"></span>
                 <form id="loginForm">
                     @csrf
@@ -336,7 +441,7 @@
                     </fieldset>
 
                     <button type="submit" class="tf-btn primary w-100">Se connecter</button>
-                    <div class="mt-12 text-variant-1 text-center noti">  <a href="#" class="text-black fw-5">Mot de passe oublié ?</a>/<a href="#modalRegister" data-bs-toggle="modal" class="text-black fw-5">S'inscrire.</a> </div>
+                    <div class="mt-12 text-variant-1 text-center noti">  <a href="#" id= 'resetPassword' class="text-black fw-5">Mot de passe oublié ?</a>/<a href="#modalRegister" data-bs-toggle="modal" class="text-black fw-5">S'inscrire.</a> </div>
                 </form>
             </div>
         </div> 
@@ -348,73 +453,272 @@
 
     <!-- popup register -->
     <div class="modal fade" id="modalRegister">
-    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="flat-account bg-surface">
+                    <h3 class="title text-center">S'inscrire</h3>
+                    <div id="success-message-register" class="alert alert-success mb-2" style="display: none;"></div>
+            
+                    <!-- Success message div -->
+                    <div id="success-message" class="alert alert-success mb-2" style="display: none;"></div>
+                    <div id="success-message-fn" class="alert alert-success mb-2" style="display: none;"></div>
+                     <div id="err-message-register" class="alert alert-danger mb-2" style="display: none;"></div>
+
+                     <form id="registerForm" action="#">
+                        @csrf
+                        <!-- Champ d'email et bouton de vérification -->
+                        <fieldset class="box-fieldset">
+                            <input type="email" class="form-contact style-1 custom-input" placeholder="Remplir votre Email !" name="email" id="emailField" required>
+                            <button type="button" class="tf-btn primary mt-3 custom-input-btn " id="verifyEmailBtn">Envoyer Code</button>
+                        </fieldset>
+
+                        <!-- Champ de saisie du code et bouton de vérification -->
+                        <fieldset class="box-fieldset" id="codeFieldset" style="display: none;">
+                            <input type="text" class="form-contact style-1 custom-input" placeholder="Saisir le code de vérification !" name="code" id="code" required>
+                            <button type="button" class="tf-btn primary mt-3 mb-4 custom-input-btn" id="verifyCodeBtn">Vérifier le Code</button>
+                            <div id="success-message-vr" class="alert alert-success mb-2" style="display: none;"></div>
+                        </fieldset>
+
+                        <!-- Champs masqués par défaut -->
+                        <div id="hiddenFields" style="display: none;">
+                            <fieldset class="box-fieldset">
+                                <input type="text" class="form-contact style-1 custom-input" placeholder="Remplir votre Nom !" name="name" required>
+                            </fieldset>
+
+                            <fieldset class="box-fieldset">
+                                <input type="text" class="form-contact style-1 custom-input" placeholder="Remplir votre Prenom !" name="prenom" required>
+                            </fieldset>
+
+                            <fieldset class="box-fieldset">
+                                <input type="tel" class="form-contact style-1 custom-input" placeholder="Remplir votre Téléphone !" name="telephone" required>
+                            </fieldset>
+
+                            <fieldset class="box-fieldset">
+                                <input type="password" class="form-contact style-1 custom-input" placeholder="Mot de passe" name="password" required>
+                            </fieldset>
+
+                            <fieldset class="box-fieldset">
+                                <input type="password" class="form-contact style-1 custom-input" placeholder="Confirmer Mot de passe" name="password_confirmation" required>
+                            </fieldset>
+
+                            <fieldset class="d-flex align-items-center gap-6">
+                            <label for="cb1" class="caption-1 text-variant-1"> J'accepte les  <span class="fw-5 text-black" data-bs-toggle="modal" data-bs-target="#termsModal" style="cursor: pointer;"> Conditions d'Utilisation  </span>.
+                                <input type="checkbox" class="tf-checkbox style-2" id="cb1" name="termsAccepted" required>
+                            </fieldset>
+                        </div>
+
+                        <!-- Bouton S'inscrire désactivé au début -->
+                        <button type="submit" class="tf-btn primary w-100" id="registerBtn" disabled>S'inscrire</button>
+
+                        <div class="mt-12 text-variant-1 text-center noti">
+                            Vous avez déjà un compte ?
+                            <a href="#modalLogin" data-bs-toggle="modal" class="text-black fw-5">Connectez-vous ici.</a>
+                        </div>
+                    </form>
+
+                </div>
+            </div> 
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <div class="flat-account bg-surface">
-                <h3 class="title text-center">S'inscrire</h3>
-                <span class="close-modal icon-close2" data-bs-dismiss="modal" id='reload'></span>
-
-                <!-- Success message div -->
-                <div id="success-message" class="alert alert-success" style="display: none;"></div>
-
-                <form id="registerForm" action="#">
-                    @CSRF 
-                    <fieldset class="box-fieldset">
-                        <label for="name">Nom<span>*</span>:</label>
-                        <input type="text" class="form-contact style-1" placeholder="Remplir votre Nom !" name="name" required>
-                    </fieldset>
-
-                    <fieldset class="box-fieldset">
-                        <label for="prenom">Prenom<span>*</span>:</label>
-                        <input type="text" class="form-contact style-1" placeholder="Remplir votre Prenom !" name="prenom" required>
-                    </fieldset>
-
-                    <fieldset class="box-fieldset">
-                        <label for="email">Email address<span>*</span>:</label>
-                        <input type="email" class="form-contact style-1" placeholder="Remplir votre Email !" name="email" required>
-                    </fieldset>
-                    
-                    <!-- Telephone input field -->
-                    <fieldset class="box-fieldset">
-                        <label for="telephone">Téléphone<span>*</span>:</label>
-                        <input type="tel" class="form-contact style-1" placeholder="Remplir votre Téléphone !" name="telephone" required>
-                    </fieldset>
-
-                    <fieldset class="box-fieldset">
-                        <label for="password">Mot de passe<span>*</span>:</label>
-                        <div class="box-password">
-                            <input type="password" class="form-contact style-1 password-field" placeholder="Mot de passe" name="password" required>
-                            <span class="show-pass">
-                                <i class="icon-pass icon-eye"></i>
-                                <i class="icon-pass icon-eye-off"></i>
-                            </span>
-                        </div>
-                    </fieldset>
-                    
-                    <fieldset class="box-fieldset">
-                        <label for="confirm_password">Confirmer Mot de passe<span>*</span>:</label>
-                        <div class="box-password">
-                            <input type="password" class="form-contact style-1 password-field2" placeholder="Confirmer Mot de passe" name="password_confirmation" required>
-                            <span class="show-pass2">
-                                <i class="icon-pass icon-eye"></i>
-                                <i class="icon-pass icon-eye-off"></i>
-                            </span>
-                        </div>
-                    </fieldset>
-                    
-                    <fieldset class="d-flex align-items-center gap-6">
-                    <label for="cb1" class="caption-1 text-variant-1">J'accepte les <span class="fw-5 text-black">Conditions d'Utilisation.</span></label>
-                        <input type="checkbox" class="tf-checkbox style-2" id="cb1" name="termsAccepted">
-                    </fieldset>
-
-                    
-                    <button type="submit" class="tf-btn primary w-100">S'inscrire</button>
-                    <div class="mt-12 text-variant-1 text-center noti">Vous avez déjà un compte ?<a href="#modalLogin" data-bs-toggle="modal" class="text-black fw-5">Connectez-vous ici.</a></div>
-                </form>
+            <div class="modal-header">
+                <h5 class="modal-title" id="termsModalLabel">Conditions d'Utilisation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id='btnClose'></button>
             </div>
-        </div> 
+            <div class="modal-body" style="max-height: 70vh; overflow-y: auto;">
+               <!-- Conditions Générales de Vente -->
+               <h6 style="color:#608BC1" class='text-center mb-2'>Conditions Générales de Vente de Lead & Boost</h6>
+                <p class='h6' ><strong>1. Objet du Contrat :</strong></p>
+                <div class='mx-3 mb-2'>
+                <span >Les présentes conditions générales ont pour objet de définir les modalités selon lesquelles Lead & Boost fournit des leads qualifiés et vérifiés à ses clients dans le domaine du marketing digital.</span>
+                </div>
+                <p class='h6'><strong>2. Engagements de Lead & Boost :</strong></p>
+                <div class='mx-3 mb-2'>
+                <ul>
+                    <li>-> Conformité des leads aux critères définis sur la marketplace.</li>
+                    <li>-> Livraison des leads dans les délais indiqués.</li>
+                    <li>-> Qualité garantie : remplacement des leads erronés au-delà d’un taux d’erreur de 10%.</li>
+                </ul>
+                </div>
+               <p class='h6'><strong>3. MODALITÉS FINANCIÈRES :</strong></p>
+                <!-- Add more sections from the document as required -->
+                <div class='mx-3 mb-2'>
+                <span>Les prix des leads sont fixés par Lead & Boost et indiqués sur la marketplace. Le paiement
+                        se fait en ligne via la plateforme sécurisée PayPal ou Stripe avant le démarrage de la
+                        mission. Aucun remboursement ne sera accordé, sauf dans le cas où les leads ne sont pas
+                        livrés dans les délais, auquel cas un remboursement au prorata des leads non livrés pourra
+                        être effectué.
+                        Les prix sont indiqués hors taxes (HT).</span>
+                </div>
+
+                <p class='h6'><strong>4. LEVIERS D’ACQUISITION DES LEADS :</strong></p>
+                <!-- Add more sections from the document as required -->
+                <div class='mx-3 mb-2'>
+                <span>Lead & Boost génère des leads qualifiés via plusieurs leviers d'acquisition, incluant, mais
+                sans s'y limiter</span>
+                <ul class='mx-3'>
+                    <li>-> Campagnes d'e-mailing.</li>
+                    <li>-> Réseaux sociaux (Facebook, LinkedIn, etc.)</li>
+                    <li>-> Moteurs de recherche (Google)</li>
+                    <li>-> Data Opt-in</li>
+                    <li>-> Appels téléphoniques</li>
+                </ul>
+                </div>
+
+                <div class='mx-3 mb-2'>
+                <p class='h6'><strong>5. CRITÈRES DE SÉLECTION DES LEADS :</strong></p>
+                <span>Les leads sont qualifiés selon les critères suivants, qui peuvent être spécifiques à chaque
+                commande:</span>
+
+                <ul class='mx-3'>
+                    <li>-> Secteur d'activité du prospect.</li>
+                    <li>-> Taille de l'entreprise</li>
+                    <li>-> Localisation géographique</li>
+                    <li>-> Autres critères spécifiques définis lors de l'achat sur la marketplace</li>
+                </ul>
+                </div>
+
+                <div class='mx-3 mb-2'>
+                <p class='h6'><strong>6. MODALITÉS DE PAIEMENT :</strong></p>
+                <span>Les paiements doivent être effectués via la plateforme sécurisée avant que la mission ne soit
+                lancée.</span><br>
+                <span>Le paiement peut être effectué par :</span>
+
+                <ul>
+                    <li>-> Carte bancaire via PayPal ou Stripe</li>
+                    <li>-> Virement bancaire sur demande (un bon de commande signé sera requis pour valider la
+                    transaction)</li>
+                </ul>
+                </div>
+
+                <div class='mx-3 mb-2'>
+                    <p class='h6'><strong>7. CONFIDENTIALITÉ:</strong></p>
+                    <span>Lead & Boost et le Client s'engagent à respecter la confidentialité des informations
+                            échangées dans le cadre de la mission. Ces informations ne seront utilisées que pour
+                            l'accomplissement des services spécifiés et ne seront pas partagées sans l'accord préalable
+                            des parties concernées. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>
+                    <p class='h6'><strong>8. RÉGLEMENT DES DIFFÉRENDS ET LOI APPLICABLE:</strong></p>
+                    <span>En cas de litige relatif à l’exécution ou à l’interprétation des présentes conditions, celui-ci
+                            sera soumis à la compétence exclusive des tribunaux de Sharjah, Émirats Arabes Unis. Le
+                            contrat est régi par les lois des Émirats Arabes Unis.</span>
+                </div>
+                <h6 style="color:#608BC1" class='text-center mb-2'>Conditions Générales de Vente de Lead & Boost</h6>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>1. DÉFINITIONS :</strong></p>
+                     <span>Les présentes Conditions Générales d'Utilisation (CGU) régissent l'accès et l'utilisation de
+                            l'application Lead & Boost. En accédant et en utilisant cette application, vous acceptez ces
+                            conditions sans réserve.  </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>2. DACCÈS À L'APPLICATION :</strong></p>
+                     <span>L'accès à l'application est réservé aux utilisateurs disposant d'un compte valide et ayant
+                            payé pour les services. Lead & Boost se réserve le droit de suspendre l'accès à l'application
+                            pour toute violation des présentes CGU.  </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>3. COMPORTEMENT DE L'UTILISATEUR :</strong></p>
+                     <span>L'utilisateur s'engage à utiliser l'application de manière conforme aux lois et règlements en
+                            vigueur. Toute activité illégale ou non conforme, y compris le fait de fournir des
+                            informations fausses ou trompeuses, peut entraîner la suspension ou la suppression du
+                            compte de l'utilisateur. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>4. PROPRIÉTÉ INTELLECTUELLE:</strong></p>
+                     <span>Les éléments contenus dans l'application, y compris mais non limités aux textes,
+                            graphiques, logos, images, etc., sont la propriété exclusive de Lead & Boost ou de ses
+                            partenaires. Toute reproduction ou exploitation sans autorisation expresse est interdite. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>5. RESPONSABILITÉ:</strong></p>
+                     <span>Lead & Boost ne saurait être tenu responsable des dommages directs ou indirects causés
+                            par l'utilisation de l'application. Le client est responsable de l'utilisation des leads achetés
+                            sur la plateforme.</span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>6. MODIFICATIONS:</strong></p>
+                     <span>Lead & Boost se réserve le droit de modifier ou de mettre à jour ces CGU à tout moment.
+                            L'utilisateur sera informé de toute modification et devra accepter les nouvelles CGU pour
+                            continuer à utiliser l'application.</span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>7. LOI APPLICABLE ET JURIDICTION:</strong></p>
+                     <span>Les présentes CGU sont régies par les lois des Émirats Arabes Unis. En cas de litige, les
+                     tribunaux compétents seront ceux de Sharjah, Émirats Arabes Unis.</span>
+                </div>
+
+                <h6 style="color:#608BC1" class='text-center mb-2'>MENTIONS LÉGALES</h6>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>1. Informations sur l'éditeur de l'application :</strong></p>
+                     <span>L'application Lead & Boost est éditée par : </span>
+                     <ul>
+                    <li>-> Nom de l'entreprise : AK Business Group FZE</li>
+                    <li>-> Statut juridique : Free Zone Establishment (FZE)</li>
+                    <li>-> Formation Number : 4311426</li>
+                    <li>-> Siège social : Business Centre, Sharjah Publishing City Free Zone, Sharjah, Émirats Arabes
+                    Unis
+                </li>
+                    <li>-> Numéro de licence : 4311426.01</li>
+                    <li>-> Date de création de la licence : 08/03/2024</li>
+                    <li>-> Date d'expiration : 07/03/2025</li>
+                    <li>-> Directeur de publication : Kader Ajouaou</li>
+                </ul>
+
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>2. Propriété intellectuelle :</strong></p>
+                     <span>L'ensemble des éléments présents sur l'application Lead & Boost, incluant, de façon non
+                            limitative, les textes, images, graphismes, logo, icônes, sons, vidéos, logiciels, et bases de
+
+                            données, sont la propriété exclusive de AK Business Group FZE ou font l'objet d'une
+                            autorisation d'utilisation. Toute reproduction, distribution, modification, adaptation,
+                            retransmission ou publication, même partielle, de ces éléments est strictement interdite
+                            sans l'accord écrit préalable de AK Business Group FZE. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>3. Protection des données personnelles :</strong></p>
+                     <span>Conformément au Règlement Général sur la Protection des Données (RGPD), Lead & Boost
+                            s'engage à respecter la confidentialité des données personnelles des utilisateurs. Les
+                            informations collectées lors de l'utilisation de l'application sont traitées conformément à
+                            notre Politique de Confidentialité, disponible sur l'application. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>4. Utilisation des cookies :</strong></p>
+                     <span>L'application Lead & Boost utilise des cookies pour améliorer l'expérience utilisateur et
+                            fournir des services personnalisés. En utilisant l'application, vous acceptez l'utilisation de
+                            cookies conformément à notre Politique relative aux cookies. </span>
+                </div>
+
+                <div class='mx-3 mb-2'>         
+                     <p class='h6'><strong>5. Loi applicable et juridique compétente :</strong></p>
+                     <span>Les Présentes mentions légales sont régies par les  lois des Émirats arabes unis. en cas de litige relatif a l'application Lead & Boost, et défault de résolution amiable,les tribunaux compétents seront ceux de Sharjah. </span>
+                </div>
+                <!-- Include additional sections as per the original content -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id='fermertermsmodal'>Fermer</button>
+            </div>
+        </div>
     </div>
 </div>
+
 
 
 <div class="modal fade" id="termsModal2" tabindex="-1" aria-labelledby="termsModalLabel2" aria-hidden="true">
@@ -614,17 +918,51 @@
     </div>
 </div>
 
+
 <script>
- 
+
+    $('#fermertermsmodal').click(function() {
+            $('#modalRegister').modal('toggle');
+    });
+
+    $('#btnClose').click(function() {
+            $('#modalRegister').modal('toggle');
+    });
+
+</script>
+
+
+
+
+<script>
+    $(document).ready(function() {
+    var clientId = {{ session('client_hom.id') }};  // Assuming the client is stored in the session
+    var leadId = {{ $detaiLead->id }};  // Assuming you're passing the lead ID to the view
+
+    // Make the AJAX request to track the view
+    $.ajax({
+        url: "{{ route('track.view') }}",
+        type: 'POST',
+        data: {
+            client_id: clientId,
+            lead_id: leadId,
+            _token: '{{ csrf_token() }}'  // Include the CSRF token for security
+        },
+        success: function(response) {
+            // Update the view count in the DOM
+            $('#viewCount').text(response.view_count);
+            consol.log(response);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error tracking view:', error);
+        }
+    });
+});
 </script>
 <script src="{{ asset('assetsMarketplace/js/my-js/auth.js') }}"></script>
 <script src="{{ asset('assetsMarketplace/js/my-js/news.js') }}"></script>
 </body>
 
-
-
-<!-- Mirrored from themesflat.co/html/homzen/property-details-v4.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 14 Oct 2024 22:35:39 GMT -->
 </html>
-
 
 @endsection

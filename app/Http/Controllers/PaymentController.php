@@ -63,6 +63,7 @@ class PaymentController extends Controller
             session()->forget('cart'); // Vider le panier
 
             return $this->getSuccessView($total);
+            
         } catch (\PayPal\Exception\PayPalConnectionException $ex) {
             return redirect()->route('payment.cancel')->with('error', 'Erreur de connexion à PayPal : ' . $ex->getMessage());
         } catch (\Exception $ex) {
@@ -159,7 +160,7 @@ class PaymentController extends Controller
         $nouveauPayment->thematique_id = $lead->thematique_id;
         $nouveauPayment->ville_id = $lead->ville_id;
         $nouveauPayment->departement_id = $lead->departement_id;
-        $nouveauPayment->publication_id = 1;
+       // $nouveauPayment->publication_id = 1;
         $nouveauPayment->paypal_payment_id = $paymentId;
         $nouveauPayment->save();
 
@@ -198,20 +199,23 @@ class PaymentController extends Controller
     // Retourner la vue de paiement réussi avec les données des thématiques
     private function getSuccessView($total)
     {
-        $data = $this->getThematicsData();
-        $thematiques=$data['thematiques'];
-        $thematiquesStatistiques=$data['thematiquesStatistiques'];
+        
+        $data                    = $this->getThematicsData();
+        $thematiques             = $data['thematiques'];
+        $thematiquesStatistiques = $data['thematiquesStatistiques'];
+        
         return view('Marketplace.paiement.success', compact('total', 'thematiques','thematiquesStatistiques'));
-   
+        
     }
 
     // Retourner la vue de paiement annulé avec les données des thématiques
     private function getCancelView()
     {
+        
         $data = $this->getThematicsData();
         $thematiques=$data['thematiques'];
         $thematiquesStatistiques=$data['thematiquesStatistiques'];
-        return view('Marketplace.paiement.cancel', compact('total', 'thematiques','thematiquesStatistiques'));
+        return view('Marketplace.paiement.cancel', compact('thematiques','thematiquesStatistiques'));
    
     }
 

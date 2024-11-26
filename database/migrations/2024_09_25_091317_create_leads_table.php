@@ -11,6 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
+
         Schema::create('leads', function (Blueprint $table) {
             $table->id();
             $table->string('reference');
@@ -42,6 +43,7 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+        
     }
 
     /**

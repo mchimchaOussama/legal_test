@@ -11,7 +11,7 @@ use Livewire\WithFileUploads;
 use App\Models\Thematique;
 use App\Models\Departement;
 use Illuminate\Support\Facades\Mail;
-
+use App\Models\Lead;
 
 
 
@@ -23,6 +23,7 @@ class Index extends Component
     public $entreprise, $nom_prenom, $email, $tel, $quantite, $date, $thematique, $departement, $description, $statut, $target_id, $prix;
 
     public $excel, $progress = 0, $commande_id = "";
+    public $results= [], $search = "";
 
 
     public function changer_statut($id, $value)
@@ -120,12 +121,6 @@ class Index extends Component
         Commande::where("id", $this->commande_id)->update(["excel_path" => $path]);
 
 
-        $this->progress    = 100;
-        $this->commande_id = "";
-        $this->excel       = "";
-
-
-
         $commande = Commande::where([
             ["id",          "=",  $this->commande_id],
             ["excel_path",  "!=", "" ],
@@ -137,14 +132,41 @@ class Index extends Component
         if($commande->count() > 0)
         {
 
-            $cmd = Commande::where("id", $this->commande_id)->first();
-            $client = $cmd->client;
+            /////// Ajouter Lead (Leads en quantite) /////////
+            $leadId = Lead::create([
+                "reference"         =>  time().session("auth")["id"],
+                "adresse_cache"     =>  "-",
+                "adresse_reelle"    =>  "-",
+                "client_id"         =>  $commande->first()->client_id,
+                "prix"              =>  $commande->first()->prix,
+                "commande"          =>  1,
+                "thematique_id"     =>  999999,
+                "departement_id"    =>  999999,
+                "ville_id"          =>  999999,
+                "code_postale_id"   =>  999999,
+                "code_postale"      =>  "commande",
+                "prospect_id"       =>  999999999,
+                "user_id"           =>  999999999,
+            ])->id;
+            
 
+            Commande::where("id", $this->commande_id)->update(["lead_id"    =>  $leadId]);
+            
+
+            $cmd    = Commande::where("id", $this->commande_id)->first();
+            $client = $cmd->client;
+            
+            
             Mail::send('mail.commandeAgre', ['cmd' => $cmd], function ($message) use ($cmd) {
                 $message->to($cmd->client->email)->subject('Votre commande a été Accéptée');
             });
+            
 
         }
+
+        $this->progress    = 100;
+        $this->commande_id = "";
+        $this->excel       = "";
 
         return;
 
@@ -154,6 +176,8 @@ class Index extends Component
     #[On('modifier-prix')]
     public function modifier_prix($value, $id)
     {
+
+        $value = trim($value, " ");
 
         $value = floatval($value);
 
@@ -170,6 +194,38 @@ class Index extends Component
     }
 
 
+    #[On("search")]
+    public function search($value)
+    {
+
+        $value = trim($value," ");
+
+        if(!empty($value))
+        {
+
+            $this->results = Commande::where("thematique",       "like", "%$value%")
+                                        ->orWhere("departement", "like", "%$value%")
+                                        ->orWhere("description", "like", "%$value%")
+                                        ->orWhereHas("client", function($query) use ($value){
+                                            $query->where("nom", "like", "%$value%")
+                                                    ->orWhere("prenom", "like", "%$value%")
+                                                    ->orWhere("entreprise", "like", "%$value%")
+                                                    ->orWhere("email", "like", "%$value%")
+                                                    ->orWhere("tel", "like", "%$value%")
+                                                    ->orWhere("numero_identification", "like", "%$value%")
+                                                    ->orWhere("siren", "like", "%$value%")
+                                                    ->orWhere("siret", "like", "%$value%")
+                                                    ->orWhere("rcs", "like", "%$value%");
+                                        })
+                                        ->get();
+            
+        }else{
+            $this->results = [];
+        }
+
+    }
+
+
     public function render()
     {
 
@@ -178,10 +234,17 @@ class Index extends Component
             $this->upload_excel_file();
         }
 
-        $commandes = Commande::latest()->paginate(10);
 
-        return view('livewire.admin.demandes.index', ["commandes"   =>  $commandes]);
+        if(sizeof($this->results) > 0)
+        {
+            $commandes = $this->results;
+        }else{
+            $commandes = Commande::latest()->paginate(10);
+        }
+
         
+        return view('livewire.admin.demandes.index', ["commandes"   =>  $commandes]);
+
     }
 
 

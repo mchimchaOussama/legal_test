@@ -13,11 +13,11 @@ class CartController extends Controller
     // Ajouter un lead au panier
     public function addToCart(Lead $lead, string $src)
     {
-        // Récupérer le panier depuis la session, ou initialiser un tableau vide si il n'existe pas
-        $cart = session()->get('cart', []);
 
-        // Si le lead n'existe pas encore dans le panier, on l'ajoute
-        if (!isset($cart[$lead->id])) {
+        $cart = session()->get('cart', []);
+        
+        if(!isset($cart[$lead->id])) {
+            
             $cart[$lead->id] = [
                 'id' => $lead->id,
                 'img' => $lead->thematique->image,
@@ -26,6 +26,7 @@ class CartController extends Controller
                 'prix' => $lead->prix,
                 'checked' => true,
             ];
+
         }
 
         // Mettre à jour le panier dans la session
@@ -54,10 +55,11 @@ class CartController extends Controller
         }
 
         // Obtenir les 5 thématiques les plus populaires
-        $thematiques = Thematique::withCount('leads')
-            ->orderBy('leads_count', 'desc')
-            ->limit(5)
-            ->get();
+        $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
 
         // Statistiques sur les thématiques
         $thematiquesStatistiques = Thematique::withCount('leads')
@@ -117,31 +119,36 @@ class CartController extends Controller
         session()->put('cart', $cart);
 
         // Obtenir les 5 thématiques les plus populaires
-        $thematiques = Thematique::withCount('leads')
-            ->orderBy('leads_count', 'desc')
-            ->limit(5)
-            ->get();
+        $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
 
-        // Statistiques sur les thématiques
+                                    
         $thematiquesStatistiques = Thematique::withCount('leads')
-            ->orderBy('leads_count', 'desc')
-            ->limit(4)
-            ->get();
+                                                ->orderBy('leads_count', 'desc')
+                                                ->limit(4)
+                                                ->get();
 
         // Retourner la vue avec le panier mis à jour
         return view('Marketplace.cart.showCart2', compact('thematiques', 'thematiquesStatistiques', 'cart', 'total'));
+
     }
 
+
     public function applyCoupon(Request $request){
+
 
         $codecoupon=$request->coupon;
         $coupon = Coupon::where('coupon', $codecoupon)->first();
 
-        if (!$coupon) {
+
+        if(!$coupon) {
             return response()->json(['error' => 'Coupon invalide ou expiré.'], 400);
         }
 
-        if ( $coupon->date_fin < now()) {
+        if( $coupon->date_fin < now()){
             return response()->json(['error' => 'Le coupon a expiré.'], 400);
         }else{
 
@@ -162,22 +169,21 @@ class CartController extends Controller
         }
 
          // Obtenir les 5 thématiques les plus populaires
-         $thematiques = Thematique::withCount('leads')
-         ->orderBy('leads_count', 'desc')
-         ->limit(5)
-         ->get();
+         $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+         ->where('commande',0)
+         ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+         ->get() // Récupère les résultats
+         ->unique('theme'); 
 
      // Statistiques sur les thématiques
      $thematiquesStatistiques = Thematique::withCount('leads')
-         ->orderBy('leads_count', 'desc')
-         ->limit(4)
-         ->get();
+                                            ->orderBy('leads_count', 'desc')
+                                            ->limit(4)
+                                            ->get();
 
-     // Retourner la vue avec les données du panier et des thématiques
-     return view('Marketplace.cart.showCart2', compact('thematiques', 'thematiquesStatistiques', 'cart', 'total'));
- }
-
-
+        // Retourner la vue avec les données du panier et des thématiques
+        return view('Marketplace.cart.showCart2', compact('thematiques', 'thematiquesStatistiques', 'cart', 'total'));
+    }
 
 
     }

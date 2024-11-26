@@ -128,7 +128,7 @@
                                 <div class="inner-container d-flex justify-content-between align-items-center">
                                     <!-- Logo Box -->
                                     <div class="logo-box d-flex">
-                                        <div class="logo">  <a class="navbar-brand ms-5" href="/"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
+                                        <div class="logo">  <a class="navbar-brand ms-5" href="{{ url('/') }}"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
                                         <div class="button-show-hide">
                                             <span class="icon icon-categories"></span>
                                         </div>
@@ -140,24 +140,25 @@
                                                 <ul class="navigation clearfix">
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
-                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
-                                                <li class=""><a href="#">A Propos</a>
-                                                </li>
+
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
+
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
+
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class=""><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                                                     
                                                 @if(session()->has('client_hom'))
@@ -165,7 +166,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -229,18 +230,15 @@
                
                 <div class="sidebar-menu-dashboard">
                     <ul class="box-menu-dashboard">
-                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboards</a></li>
-                     <!--   <li class="nav-menu-item"><a class="nav-menu-link" href="my-property.html"><span class="icon icon-list-dashes"></span>My Properties</a></li>-->
-                    <!--    <li class="nav-menu-item"><a class="nav-menu-link" href="my-invoices.html"><span class="icon icon-file-text"></span> My Invoices</a></li>-->
-                     <!--   <li class="nav-menu-item"><a class="nav-menu-link" href="my-favorites.html"><span class="icon icon-heart"></span>My Favorites</a></li>-->
-               
-                        <li class="nav-menu-item active"><a class="nav-menu-link" href="my-profile.html"><span class="icon icon-profile"></span> My Profile</a></li>
-                        <!--<li class="nav-menu-item"><a class="nav-menu-link" href="add-property.html">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19.5 3H4.5C4.10218 3 3.72064 3.15804 3.43934 3.43934C3.15804 3.72064 3 4.10218 3 4.5V19.5C3 19.8978 3.15804 20.2794 3.43934 20.5607C3.72064 20.842 4.10218 21 4.5 21H19.5C19.8978 21 20.2794 20.842 20.5607 20.5607C20.842 20.2794 21 19.8978 21 19.5V4.5C21 4.10218 20.842 3.72064 20.5607 3.43934C20.2794 3.15804 19.8978 3 19.5 3ZM19.5 19.5H4.5V4.5H19.5V19.5ZM16.5 12C16.5 12.1989 16.421 12.3897 16.2803 12.5303C16.1397 12.671 15.9489 12.75 15.75 12.75H12.75V15.75C12.75 15.9489 12.671 16.1397 12.5303 16.2803C12.3897 16.421 12.1989 16.5 12 16.5C11.8011 16.5 11.6103 16.421 11.4697 16.2803C11.329 16.1397 11.25 15.9489 11.25 15.75V12.75H8.25C8.05109 12.75 7.86032 12.671 7.71967 12.5303C7.57902 12.3897 7.5 12.1989 7.5 12C7.5 11.8011 7.57902 11.6103 7.71967 11.4697C7.86032 11.329 8.05109 11.25 8.25 11.25H11.25V8.25C11.25 8.05109 11.329 7.86032 11.4697 7.71967C11.6103 7.57902 11.8011 7.5 12 7.5C12.1989 7.5 12.3897 7.57902 12.5303 7.71967C12.671 7.86032 12.75 8.05109 12.75 8.25V11.25H15.75C15.9489 11.25 16.1397 11.329 16.2803 11.4697C16.421 11.6103 16.5 11.8011 16.5 12Z" fill="#A3ABB0"/>
-                            </svg>
-                             Add Property</a></li>-->
-                        <li class="nav-menu-item"><a class="nav-menu-link" href="index.html"><span class="icon icon-sign-out"></span> Logout</a></li>
+                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboard</a></li>
+                        <li class="nav-menu-item active"><a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-profile"></span> Profil</a></li>
+                        <li class="nav-menu-item">
+                            <a class="nav-menu-link" href="{{route('dashboard.client-commandes')}}">
+                                <span class="icon icon-list-dashes"></span>
+                                Commandes
+                            </a>
+                        </li>
+                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{ route('logout') }}"><span class="icon icon-sign-out"></span> Déconnecter</a></li>
                     </ul>
                 </div>
 

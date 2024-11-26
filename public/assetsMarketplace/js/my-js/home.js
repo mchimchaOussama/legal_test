@@ -22,6 +22,7 @@ $(document).ready(function() {
                         const formattedDate = updatedAt.toLocaleDateString('fr-FR'); // Formats date to 'dd/mm/yyyy'
                         // Construct property details URL using the global variable
                         const propertyUrl = `${propertyDetailsUrl}/${lead.id}`;
+                        const routeWithParams = cartAddRoute.replace(':lead', lead.id);
                         $('#leads-container').append(`
                             <div class="col-xl-3 col-lg-6 col-md-6">
                                 <div class="homeya-box">
@@ -35,13 +36,13 @@ $(document).ready(function() {
                                                 <ul class="d-flex gap-4"></ul>
                                             </div>
                                             <div class="bottom">
-                                                <span class="flag-tag success style-2">${lead.thematique.thematique}</span>
+                                                <span class="flag-tag success style-2">   ${lead.thematique.theme === 'enr' ? 'énergie gaz / électrique' : lead.thematique.theme}</span>
                                             </div>
                                         </a>
                                         <div class="content">
                                             <div class='row'>
                                                 <div class="col-lg-9">
-                                                    <div class="text-capitalize fw-7"><a href="${propertyUrl}" class="link"> ${lead.modeConsommation}</a></div>
+                                                    <div class="text-capitalize fw-7"><a href="${propertyUrl}" class="link"> ${lead.thematique.thematique}</a></div>
                                                 </div>
                                                 <div class="col-lg-3">
                                                     ${isAuthenticated ? `
@@ -56,11 +57,15 @@ $(document).ready(function() {
                                         <div class="archive-bottom d-flex justify-content-between align-items-center">
                                             <div class="d-flex gap-8 align-items-center">
                                                 <li class="item">
-                                                    <button class="btn btn-primary btn-sm"> <i class="fas fa-shopping-cart"></i>    
+                                                     <p class='h7'>€ ${lead.prix}</p>
                                                 </li>
                                             </div>
                                             <div class="d-flex gap-8 align-items-center">
-                                                <p class='h7'>€ ${lead.prix}</p>
+                                            
+                                                     <form method="POST" action="${routeWithParams}" class="contact-form">
+                                                        <input type="hidden" name="_token" value="${csrfToken}">
+                                                        <input type="image" src="${addCartImage}" width="30" height="30" alt="addPanier">
+                                                    </form>
                                             </div>
                                         </div>
                                     </div>
@@ -69,7 +74,7 @@ $(document).ready(function() {
                         `);
                     });
                 } else {
-                    $('#leads-container').append('<p>No leads available for this thematique.</p>');
+                    $('#leads-container').append('<p class="alert alert-warning" >Aucune Lead disponible pour cette thématique.</p>');
                 }
             },
             error: function(xhr) {

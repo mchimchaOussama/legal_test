@@ -56,28 +56,25 @@
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
                                                 </li>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
 
-                                                <li class="current"><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
 
-                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a>
-                                                </li>
-
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
 
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class=""><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
                                                 @if(session()->has('client_hom'))
@@ -85,7 +82,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                     <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>                                        
-                                                    <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                    <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -246,7 +243,7 @@
                             <div class="fw-7 text-white">Top Thematique</div>
                             <ul class="mt-10 navigation-menu-footer">
                                 @foreach($thematiquesStatistiques as $thematiquesStatistique)
-                                <li> <a href="#" class="caption-1 text-variant-2">{{$thematiquesStatistique->thematique}}</a> </li>
+                                <li>  <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">@if ($thematiquesStatistique->theme =='enr' )  energie gaz /électrique @else {{$thematiquesStatistique->theme}} @endif </a>  </li>
                                 @endforeach
                                
                             </ul>

@@ -8,8 +8,14 @@
     DÉPARTEMENTS
     @endsection
 
+
     @section("element")
-        <a role="button" class="btn btn-primary px-1 add-modal">Ajouter Départements</a>
+        <a role="button" class="btn btn-primary px-1 add-modal">Ajouter Département</a>
+    @endsection
+
+    
+    @section("navbar-element")
+        <input type="text" class="border-0 search-navbar"  class="border-0" placeholder="Rechercher...">
     @endsection
 
 
@@ -54,12 +60,41 @@
                     </tbody>
                 </table>
               </div>
-              <!-- Pagination Links -->
-              <div class="d-flex  mt-1 mx-2">
-                  <div class="btn-group" role="group">
-                      {{ $departements->links('pagination::bootstrap-4') }}
-                  </div>
-              </div>
+
+
+            <div class="w-100 mt-1 mb-2 mx-2">
+
+                @if($departements instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                    <span class="text-secondary me-1">Pages:</span>
+
+                    @php
+
+                        $pagination_start = $departements->currentPage() - 2;
+                        
+                        if($pagination_start <= 0) $pagination_start = 1;
+
+                        $pagination_end   = $departements->currentPage() + 2;
+
+                        if($pagination_end > $departements->lastPage()) $pagination_end = $departements->lastPage();
+
+                    @endphp
+
+                    <a type="button" class="btn btn-outline-secondary btn-sm" href="?page=1" wire:navigate title="Première page">
+                        <
+                    </a>
+                    @for($p=$pagination_start; $p <= $pagination_end; $p++)
+                        <a type="button" class="btn @if($departements->currentPage() == $p) btn-secondary @else btn-outline-secondary @endif btn-sm" href="?page={{ $p }}">
+                            {{ $p }}
+                        </a>
+                    @endfor
+                    <a type="button" class="btn btn-outline-secondary btn-sm" href="?page={{ $departements->lastPage() }}" title="Dernière page">
+                        >
+                    </a>
+
+                @endif
+
+            <div>
+
           </div>
 
           @include('livewire.admin.departement.ajouter')

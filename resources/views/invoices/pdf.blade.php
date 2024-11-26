@@ -53,6 +53,11 @@
  
 <div class="invoice">
     <div class="invoice-header">
+
+        <div style="text-align: center;">
+            <img width="150" src="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjjTubAaMrXYGWTls9HDEuVmYS785PT-PbBv7thRoMLN8C-rgQrg8NYMEF0O09zRI-qRtoosF_yxO37AbjhsDiH_SBudN_pupSApq7HKvVw3c8UVNuisVYmVbZP7GagiqFYaGj7r5lCZWy8FRi-BoXEZtWZa4JiG5prmtanWq1YbUDi-Bi4h4ztI4ggy7NB/s1600/logo.png" alt="Lead & Boost Logo" style="display: block; border: 0; max-width: 100%; height: auto;" />
+        </div>
+       
         <h1>Facture</h1>
         <h4>Numéro de Facture : {{$invoice->id}}</h4>
         <p>Date : {{ now()->format('d-m-Y') }}</p>

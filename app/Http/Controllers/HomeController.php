@@ -19,6 +19,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\URL;
+use App\Models\Commande;
+
+
 
 class HomeController extends Controller
 {
@@ -37,7 +40,10 @@ class HomeController extends Controller
     
         // If no thematique_id, get the first thematic ID or a default
         if (!$thematiqueId) {
-            $defaultThematique = Thematique::first(); // Fetch the first thematique
+            $defaultThematique = Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+            ->where('commande',0)
+            ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante
+            ->first(); // Fetch the first thematique
             $thematiqueId = $defaultThematique ? $defaultThematique->id : null;
         }
     
@@ -45,6 +51,8 @@ class HomeController extends Controller
         $leads = Lead::with('thematique','ville','departement') // Ensure you have the relationship defined in the Lead model
             ->where('thematique_id', $thematiqueId)
             ->where('payer', 0)
+            ->where('publier', 1)
+            ->where('commande',0)
             ->withCount('viewedByClients')
             ->latest()
             ->take(8)
@@ -57,19 +65,28 @@ class HomeController extends Controller
     public function get_home ()
     {
         $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
-        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante
-        ->limit(5) // Limite aux 5 thématiques avec le plus de leads
-        ->get(); // Récupère les résultats
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
 
+        $thematiqueArrays = [] ;
 
-        $thematiquesFurstSlideSherchs =  Thematique::all(); // Récupère les résultats
+        $themes  = Thematique::all();
+            foreach ($themes as $theme) {   
+                $thematiqueArrays[] = $theme->theme;
+            }
+        $thematiqueArrays = array_unique(Thematique::pluck('theme')->toArray());
+     
+
         $DepartementFurstSlideSherchs =  Departement::all(); // Récupère les résultats
 
         $topThematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
         ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante
         ->first();  // Limite aux 5 thématiques avec le plus de leads
 
-        $top3leadThematique = Lead::where([
+        $top3leadThematique = Lead::whereNull("client_id")->where([
             ['thematique_id', '=', $topThematiques->id], 
             ['payer', '=', 0]
         ])->withCount('viewedByClients')->limit(3)->get();
@@ -90,33 +107,51 @@ class HomeController extends Controller
         $reviews = Review::with('client')->where('publier',1)->get();
   
 
-        return view('Marketplace.Home',compact('thematiques','thematiquesStatistiques','thematiquesFurstSlideSherchs','DepartementFurstSlideSherchs','topThematiques','top3leadThematique','villesSlide','reviews'));
+        return view('Marketplace.Home',compact('thematiques','thematiquesStatistiques','thematiqueArrays','DepartementFurstSlideSherchs','topThematiques','top3leadThematique','villesSlide','reviews'));
     }
 
 ////////////////////////////////////////   Marketplace      ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 
 
 public function marketplace_get(Request $request)
 {
 
     // Retrieve the initial data for the view
-    $thematiques = Thematique::withCount('leads')
-        ->orderBy('leads_count', 'desc')
-        ->limit(5)
-        ->get();
+    $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+    ->where('commande',0)
+    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+    ->get() // Récupère les résultats
+    ->unique('theme'); 
 
     $thematiquesStatistiques = Thematique::withCount('leads')
+        ->where('commande',0)
         ->orderBy('leads_count', 'desc')
         ->limit(4)
         ->get();
 
-    $thematiquesFurstSlideSherchs = Thematique::all();
     $DepartementFurstSlideSherchs = Departement::all();
 
+     $thematiquesFurstSlideSherchs = Thematique::where('commande',0)->get();
 
+    ///////// theme filter
+
+    $thematiqueArrays = [] ;
+
+    $themes  = Thematique::where('commande',0)->get();
+        foreach ($themes as $theme) {   
+            $thematiqueArrays[] = $theme->theme;
+        }
+    $thematiqueArrays = array_unique(Thematique::where('commande',0)->pluck('theme')->toArray());
+
+  
+
+
+    ///////// end theme filter ///////////////////
 
     // Paginate results initially (this will be updated on filter)
-    $leadAlls = session('leadAlls', Lead::where('payer', 0)->where('publier', 1)->withCount('viewedByClients')->latest('updated_at')->paginate(12));
+    $leadAlls = session('leadAlls', Lead::whereNull("client_id")->where('payer', 0)->where('publier', 1)->withCount('viewedByClients')->latest('updated_at')->paginate(12));
 
 
     return view('Marketplace.marketplace', compact(
@@ -124,17 +159,21 @@ public function marketplace_get(Request $request)
         'thematiquesStatistiques', 
         'thematiquesFurstSlideSherchs', 
         'DepartementFurstSlideSherchs', 
-        'leadAlls'
+        'leadAlls',
+        'thematiqueArrays'
     ));
 }
 
 public function marketplace_filter(Request $request) 
 {
+
     // Retrieve the initial data for the view
-    $thematiques = Thematique::withCount('leads')
-        ->orderBy('leads_count', 'desc')
-        ->limit(5)
-        ->get();
+    $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+    ->where('commande',0)
+    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+    ->get() // Récupère les résultats
+    ->unique('theme'); 
+
 
     $thematiquesStatistiques = Thematique::withCount('leads')
         ->orderBy('leads_count', 'desc')
@@ -143,6 +182,15 @@ public function marketplace_filter(Request $request)
 
     $thematiquesFurstSlideSherchs = Thematique::all();
     $DepartementFurstSlideSherchs = Departement::all();
+
+
+    $thematiqueArrays = [] ;
+
+    $themes  = Thematique::all();
+        foreach ($themes as $theme) {   
+            $thematiqueArrays[] = $theme->theme;
+        }
+    $thematiqueArrays = array_unique(Thematique::pluck('theme')->toArray());
 
     // Start with all leads that are not paid and published
     $leadQuery = Lead::where('payer', 0)
@@ -160,6 +208,24 @@ public function marketplace_filter(Request $request)
         session()->flash('thematique_id', $request->input('thematique_id'));
     }
 
+
+    if ($request->filled('thematiqueArray')) {
+        $leadQuery->whereHas('thematique', function($query) use ($request) {
+            $query->where('theme', $request->input('thematiqueArray'));  
+        });
+        session()->flash('thematiqueArray', $request->input('thematiqueArray'));
+    }
+
+
+    if ($request->filled('thematiqueSelect')) {
+        $leadQuery->whereHas('thematique', function($query) use ($request) {
+            $query->where('thematique', $request->input('thematiqueSelect'));  
+        });
+        session()->flash('thematiqueArray', $request->input('thematiqueArray'));
+    }
+
+
+
     if ($request->filled('departement_id')) {
         $leadQuery->where('departement_id', $request->input('departement_id'));
         session()->flash('departement_id', $request->input('departement_id'));
@@ -173,10 +239,11 @@ public function marketplace_filter(Request $request)
     }
 
     // Time-based filtering
-    if ($request->filled('time_filter')) {
+    if($request->filled('time_filter')){
+
         $timeFilter = $request->input('time_filter');
 
-        switch ($timeFilter) {
+        switch ($timeFilter){
             case 'today':
                 $leadQuery->whereDate('created_at', now()->format('Y-m-d'));
                 break;
@@ -204,27 +271,55 @@ public function marketplace_filter(Request $request)
     
     // Redirect to the marketplace page with input
     return redirect()->route('get.marketplace')->withInput();
+    
 }
     
+
+
 public function detai_get($id){
 
-    $thematiques = Thematique::withCount('leads')
-        ->orderBy('leads_count', 'desc')
-        ->limit(5)
-        ->get();
+    if(Lead::where("id", $id)->where("payer", 1)->count() > 0) return redirect("/marketplace/marketplace");
 
-    $detaiLead = Lead::find($id);
+
+        $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
+
+
+    $check_leady_type = Lead::where("id", $id)->whereNull("client_id");
+
+    
+
+    if($check_leady_type->count() > 0)
+    {
+
+        $view      = "Marketplace.detail";
+        $detaiLead = Lead::find($id);
+
+    }else{
+
+        $view      = "Marketplace.detai-excel";
+        $detaiLead = Lead::find($id);
+
+        $commandeDetail = Commande::where("lead_id", $id)->first();
+
+        $detaiLead->commande_details = $commandeDetail;
+
+    }
+
 
     $thematiquesStatistiques = Thematique::withCount('leads')
-    ->orderBy('leads_count', 'desc')
-    ->limit(4)
-    ->get();
+                                            ->orderBy('leads_count', 'desc')
+                                            ->limit(4)
+                                            ->get();
+
 
     $slidePub = Lead::latest('updated_at')->limit(4)->get();
 
 
-
-return view('Marketplace.detail',compact('thematiques','detaiLead','thematiquesStatistiques','slidePub'));
+    return view($view,compact('thematiques','detaiLead','thematiquesStatistiques','slidePub'));
 
 }
 
@@ -235,14 +330,15 @@ return view('Marketplace.detail',compact('thematiques','detaiLead','thematiquesS
     public function get_faq(){
 
     $thematiquesStatistiques = Thematique::withCount('leads')
-    ->orderBy('leads_count', 'desc')
-    ->limit(4)
-    ->get();
+                                            ->orderBy('leads_count', 'desc')
+                                            ->limit(4)
+                                            ->get();
 
-    $thematiques = Thematique::withCount('leads')
-    ->orderBy('leads_count', 'desc')
-    ->limit(5)
-    ->get();
+                                            $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+                                            ->where('commande',0)
+                                            ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+                                            ->get() // Récupère les résultats
+                                            ->unique('theme'); 
 
     return view('Marketplace.faq',compact('thematiquesStatistiques','thematiques')); 
 
@@ -259,10 +355,11 @@ return view('Marketplace.detail',compact('thematiques','detaiLead','thematiquesS
         ->limit(4)
         ->get();
     
-        $thematiques = Thematique::withCount('leads')
-        ->orderBy('leads_count', 'desc')
-        ->limit(5)
-        ->get();
+        $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
 
         $thematiqueselect=Thematique::all();
         $departementselect=Departement::all();
@@ -288,7 +385,7 @@ return view('Marketplace.detail',compact('thematiques','detaiLead','thematiquesS
         $client = Client::find($clientId);
     
         // Récupérer tous les départements
-        $departements = Departement::select('id', 'departement as name')->get();
+        $departements = Departement::select('id', 'departement as name','num')->get();
     
         // Initialiser un tableau vide pour les IDs sélectionnés
         $selectedDepartements = [];
@@ -420,7 +517,7 @@ public function furstStepRegister(Request $request)
             // Send the email
     Mail::send('mail.succesCompte', ['client' => $user, 'resetLink' => $resetLink], function ($message) use ($user) {
         $message->to($user->email)
-                ->subject('Votre compte a été créé avec succès');
+                ->subject("Réception de votre demande d'inscription sur Lead & Boost");
     });
 
     // Optionally, you can log the user in after registration
@@ -554,9 +651,10 @@ public function about_us(){
 
 
     $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
-    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante
-    ->limit(5) // Limite aux 5 thématiques avec le plus de leads
-    ->get(); // Récupère les résultats
+    ->where('commande',0)
+    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+    ->get() // Récupère les résultats
+    ->unique('theme'); 
 
     $thematiquesStatistiques = Thematique::withCount('leads')
     ->orderBy('leads_count', 'desc')
@@ -572,9 +670,10 @@ public function contact(){
 
 
     $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
-    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante
-    ->limit(5) // Limite aux 5 thématiques avec le plus de leads
-    ->get(); // Récupère les résultats
+    ->where('commande',0)
+    ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+    ->get() // Récupère les résultats
+    ->unique('theme'); 
 
     $thematiquesStatistiques = Thematique::withCount('leads')
     ->orderBy('leads_count', 'desc')
@@ -633,6 +732,21 @@ public function subscribe(Request $request)
     return response()->json(['success' => true, 'message' => 'Subscription successful!']);
 }
 
+
+    public function get_commandes()
+    {
+
+        $commandes   = Commande::where("client_id", session("client_hom")["id"])->latest()->get();
+
+        $thematiques =  Thematique::withCount('leads') // Compte le nombre de leads pour chaque thématique
+        ->where('commande',0)
+        ->orderBy('leads_count', 'desc') // Trie par le nombre de leads de manière décroissante // Limite aux 5 thématiques avec le plus de leads
+        ->get() // Récupère les résultats
+        ->unique('theme'); 
+
+        return view("Marketplace.dashbord.commandes", compact("commandes", "thematiques"));
+
+    }
 
 
 }

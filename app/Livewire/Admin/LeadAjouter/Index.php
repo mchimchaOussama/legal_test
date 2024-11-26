@@ -51,6 +51,7 @@ class Index extends Component
     public function supprimer_image()
     {
         $this->lead_image = "";
+        
     }
 
 

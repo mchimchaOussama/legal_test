@@ -3,6 +3,9 @@
 
 
         <div class="navbar-container d-flex content">
+            
+            @yield("navbar-element")
+
             <div class="bookmark-wrapper d-flex align-items-center">
                 <ul class="nav navbar-nav d-xl-none">
                     <li class="nav-item"><a class="nav-link menu-toggle" href="javascript:void(0);"><i class="ficon" data-feather="menu"></i></a></li>

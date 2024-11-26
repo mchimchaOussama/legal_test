@@ -30,8 +30,6 @@ class Index extends Component
 
 
 
-
-
     public function ajouter_ville(){
 
         $this->validate(
@@ -174,6 +172,16 @@ class Index extends Component
         return $this->dispatch("toast-success", message:"ville modifié avec succès");
 
     }
+
+    /*
+    #[On("search")]
+    public function search($value)
+    {
+        
+
+
+    }
+    */
 
 
     public function render()

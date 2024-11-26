@@ -56,27 +56,23 @@
                                                 <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
 
-                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
 
-                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a>
-                                                </li>
-
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
 
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class=""><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
-                                                <li class="current"><a href="{{route('get.contact')}}">Contact</a>
-                                                </li>
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
+                                                <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
 
                                                 @if(session()->has('client_hom'))
@@ -84,7 +80,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>                                          
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                  
                                                         <li> 
                                                         <a href="#">
@@ -111,9 +107,9 @@
                                             @if(session()->has('client_hom'))
                                             
                                             @else
-                                                <li><a href="#modalLogin" data-bs-toggle="modal">Login</a></li>
+                                                <li><a href="#modalLogin" data-bs-toggle="modal">Se connecter" </a></li>
                                                 <li>/</li>
-                                                <li><a href="#modalRegister" data-bs-toggle="modal">Register</a></li>
+                                                <li><a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a></li>
                                             @endif
                                         </ul>
                                         @if (session('cart') && count(session('cart')) > 0)
@@ -146,9 +142,9 @@
                         
                         <div class="bottom-canvas">
                             <div class="login-box flex align-items-center">
-                                <a href="#modalLogin" data-bs-toggle="modal">Login</a>
+                                <a href="#modalLogin" data-bs-toggle="modal">Se connecter</a>
                                 <span>/</span>
-                                <a href="#modalRegister" data-bs-toggle="modal">Register</a>
+                                <a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a>
                             </div>
                             <div class="menu-outer"></div>
                             <div class="button-mobi-sell">
@@ -174,10 +170,6 @@
             <!-- Page Title -->
             <section class="flat-title-page style-2">
                 <div class="container">
-                    <ul class="breadcrumb">
-                        <li><a href="{{route('get.home')}}">Accueil</a></li>
-                        <li>/ Contact </li>
-                    </ul>
                     <h2 class="text-center">Contact</h2>
                 </div>
             </section>
@@ -188,7 +180,7 @@
                         <div class="col-lg-8">
                             <div class="contact-content">
                                 <h5>Contactez-nous</h5>
-                                <p class="body-2 text-variant-1">Si vous avez des questions ou besoin d'assistance, vous pouvez contacter notre équipe. Notre équipe est disponible pour vous aider du lundi au vendredi, de 10h à 20h.</p>
+                                <p class="body-2 text-variant-1">Si vous avez des questions ou besoin d'assistance, notre équipe est à votre disposition. Nous sommes disponibles du lundi au vendredi, de 10h à 20h.</p>
 
                                 @if (session('success'))
                                     <div class="alert alert-success" role="alert" style="margin: 20px;">
@@ -215,7 +207,7 @@
                                         </fieldset>
                                         <fieldset>
                                             <label for="subject">Sujet:</label>
-                                            <input type="text" class="form-control style-1" placeholder="Enter Keyword" name="subject" id="subject">
+                                            <input type="text" class="form-control style-1" placeholder="Votre Sujet..." name="subject" id="subject">
                                         </fieldset>
                                     </div>
                                     <fieldset class="box">
@@ -236,7 +228,7 @@
                                 <ul>
                                     <li class="box">
                                         <div class="text-1 title">Infomation:</div>
-                                        <p class="p-16 text-variant-1">test@gmail.com</p>
+                                        <p class="p-16 text-variant-1"> contact@leadandboost.com </p>
                                     </li>
                                 </ul>
                             </div>
@@ -298,7 +290,7 @@
                             <div class="fw-7 text-white">Top Thematique</div>
                             <ul class="mt-10 navigation-menu-footer">
                                 @foreach($thematiquesStatistiques as $thematiquesStatistique)
-                                <li> <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">{{$thematiquesStatistique->theme}}</a> </li>
+                                <li>  <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">@if ($thematiquesStatistique->theme =='enr' )  energie gaz /électrique @else {{$thematiquesStatistique->theme}} @endif </a>  </li>
                                 @endforeach
                                
                             </ul>

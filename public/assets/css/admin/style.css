@@ -34,3 +34,9 @@
     background-color: #00bf73;
     transition: width 0.5s linear;
 }
+.search-navbar{
+    width: 200px;
+    padding: 0 10px;
+    font-size: 15px;
+    outline: none;
+}

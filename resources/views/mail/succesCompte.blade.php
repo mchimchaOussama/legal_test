@@ -19,14 +19,19 @@
                     <!-- Greeting -->
                     <tr>
                         <td align="center" style="font-size: 24px; font-weight: bold; padding: 10px 20px;">
-                            Votre compte a été créé avec succès
+                        Bonjour {{$client->nom}} {{$client->prenom}}
                         </td>
                     </tr>
                     <!-- Message Body -->
                     <tr>
                         <td align="center" style="font-size: 16px; color: #666666; line-height: 1.5; padding: 10px 30px;">
-                            Bonjour {{$client->nom}} {{$client->prenom}},<br><br>
-                            Votre compte a été créé avec succès. Vous recevrez prochainement un appel vocal pour l'activation de votre compte. Veuillez accepter cet appel pour finaliser la validation de votre compte.
+                            Merci pour votre inscription sur **Lead & Boost** ! Nous avons bien reçu vos informations. <br>
+                            Un membre de notre équipe vous contactera sous 48 heures pour valider votre inscription
+                            et s’assurer que votre profil est à jour afin de vous proposer les leads les plus adaptés à vos
+                            besoins. <br>
+                            Merci de votre patience et bienvenue parmi nous ! <br> <br>
+                            Cordialement, <br>
+                            L’équipe Lead & Boost
                         </td>
                     </tr>
                     <!-- Call to Action -->

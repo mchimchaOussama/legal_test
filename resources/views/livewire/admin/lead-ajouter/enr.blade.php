@@ -1,11 +1,11 @@
 <div>
 
 @section("title")
-    Lead ENR
+energie gaz /électrique
     @endsection
 
     @section("page-title")
-     Lead Enr
+    energie gaz /électrique
     @endsection
 
         <div class="card">

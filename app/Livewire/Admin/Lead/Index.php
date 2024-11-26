@@ -185,10 +185,10 @@ class Index extends Component
     public function render()
     {
         
-        $leads = Lead::query()->with(["thematique", "departement", "prospect"]);
+        $leads        = Lead::query()->whereNull("client_id")->with(["thematique", "departement", "prospect"]);
         $search_query = trim($this->f_search);
         $search_query = $search_query;
-
+        
         if(strlen($search_query) > 0){
 
             $leads->where(function($query) use ($search_query){
@@ -245,7 +245,7 @@ class Index extends Component
             $leads->where("payer", 0);
         }
 
-        $leads = $leads->latest()->paginate(5);
+        $leads = $leads->latest()->paginate(10);
 
         return view('livewire.admin.lead.index', [
            'leads' => $leads,

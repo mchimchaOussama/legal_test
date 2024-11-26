@@ -91,7 +91,7 @@ class Index extends Component
                 // Send the email
                 Mail::send('mail.finalStipRegister', ['user' => $user], function ($message) use ($user) {
                     $message->to($user->email)
-                            ->subject('Votre compte a été activé avec succès');
+                            ->subject("Votre compte Lead & Boost est activé !");
                 });
 
                 Client::where("id", $id)->update([

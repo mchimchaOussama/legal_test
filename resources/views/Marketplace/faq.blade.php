@@ -82,28 +82,25 @@
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
                                                 </li>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
 
-                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a>
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
+
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
+
+                                                <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a>
-                                                </li>
-
-
-                                                <li class="current"><a href="{{route('get.faq')}}">FAQ</a>
-                                                </li>
-
-                                                <li class=""><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
                                                 @if(session()->has('client_hom'))
@@ -111,7 +108,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -137,9 +134,9 @@
                                         @if(session()->has('client_hom'))
                                             
                                             @else
-                                                <li><a href="#modalLogin" data-bs-toggle="modal">Login</a></li>
+                                                <li><a href="#modalLogin" data-bs-toggle="modal">Se connecter</a></li>
                                                 <li>/</li>
-                                                <li><a href="#modalRegister" data-bs-toggle="modal">Register</a></li>
+                                                <li><a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a></li>
                                             @endif
                                         </ul>
                                         @if (session('cart') && count(session('cart')) > 0)
@@ -172,9 +169,9 @@
                         <div class="nav-logo"><a href="index.html"><img src="images/logo/logo%402x.png" alt="nav-logo" width="174" height="44"></a></div>
                         <div class="bottom-canvas">
                             <div class="login-box flex align-center">
-                                <a href="#modalRegister" data-bs-toggle="modal">Login</a>
+                                <a href="#modalRegister" data-bs-toggle="modal">Se connecter</a>
                                 <span>/</span>
-                                <a href="#modalLogin" data-bs-toggle="modal">Register</a>
+                                <a href="#modalLogin" data-bs-toggle="modal">S'inscrire</a>
                             </div>
                             <div class="menu-outer"></div>
                             <div class="button-mobi-sell">
@@ -200,10 +197,6 @@
             <!-- Page Title -->
             <section class="flat-title-page style-2">
                 <div class="container">
-                    <ul class="breadcrumb">
-                        <li><a href="{{route('get.home')}}">Accueil</a></li>
-                        <li>/ Pages</li>
-                    </ul>
                     <h2 class="text-center">FAQs</h2>
                 </div>
             </section>
@@ -443,7 +436,7 @@
                             <div class="fw-7 text-white">Top Thematique</div>
                             <ul class="mt-10 navigation-menu-footer">
                                 @foreach($thematiquesStatistiques as $thematiquesStatistique)
-                                <li> <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">{{$thematiquesStatistique->theme}}</a> </li>
+                                <li>  <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">@if ($thematiquesStatistique->theme =='enr' )  energie gaz /électrique @else {{$thematiquesStatistique->theme}} @endif </a>  </li>
                                 @endforeach
                                
                             </ul>

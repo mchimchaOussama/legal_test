@@ -43,13 +43,62 @@
                                 <div class="inner-container d-flex justify-content-between align-items-center">
                                     <!-- Logo Box -->
                                     <div class="logo-box d-flex">
-                                        <div class="logo">  <a class="navbar-brand ms-5" href="index.html"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
+                                        <div class="logo">  <a class="navbar-brand ms-5" href="{{ url('/') }}"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
                                         <div class="button-show-hide">
                                             <span class="icon icon-categories"></span>
                                         </div>
                                     </div>
                                     <div class="nav-outer">
+                                        <!-- Main Menu -->
+                                        <nav class="main-menu show navbar-expand-md">
+                                            <div class="navbar-collapse collapse clearfix" id="navbarSupportedContent">
+                                                <ul class="navigation clearfix">
+                                                <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
+                                                    <ul>
+                                                        @foreach($thematiques as $thematique)
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
+                                                        @endforeach
+                                                    </ul>
+                                                </li>
 
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
+
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
+
+                                                <li class=""><a href="{{route('get.faq')}}">FAQ</a>
+                                                </li>
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
+                                                <li class=""><a href="{{route('get.contact')}}">Contact</a>
+                                                    
+                                                @if(session()->has('client_hom'))
+
+                                                <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
+                                                    <ul>
+                                                        <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
+                                                        <li> 
+                                                        <a href="#">
+                                                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" style="border: none; background: none;  cursor: pointer;">
+                                                                déconnecter
+                                                            </button>
+                                                        </form>
+                                                        </a>
+
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                @endif
+                                                </ul>
+                                            </div>
+                                        </nav>
+                                        <!-- Main Menu End-->
                                     </div>
                                     <div class="header-account">
 
@@ -94,10 +143,10 @@
                 <!-- sidebar dashboard -->
                 <div class="sidebar-menu-dashboard">
                     <ul class="box-menu-dashboard">
-                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboards</a></li>
-                        <li class="nav-menu-item "><a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-profile"></span> My Profile</a></li>
-                        <li class="nav-menu-item active"><a class="nav-menu-link" href="{{route('marketplace.client-commandes')}}"><span class="icon icon-package"></span>Commandes</a></li>
-                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{ route('logout') }}"><span class="icon icon-sign-out"></span> Logout</a></li>
+                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboard</a></li>
+                        <li class="nav-menu-item "><a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-profile"></span> Profil</a></li>
+                        <li class="nav-menu-item active"><a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-list-dashes"></span> Commandes</a></li>
+                        <li class="nav-menu-item"><a class="nav-menu-link" href="{{ route('logout') }}"><span class="icon icon-sign-out"></span> Déconnecter</a></li>
                     </ul>
                 </div>
                 <!-- end sidebar dashboard -->
@@ -108,48 +157,48 @@
                         </div>
                         <div class="wrapper-content row">
                             <div class="col-xl-12">
-                                <div class="widget-box-2 wd-listing">
+                                <div class="widget-box-2 wd-listing" style="max-height:600px;overflow-y:auto">
 
-                                    <h6 class="title mb-4">Commandes en Quantité:</h6>
-                                <div class="wrap-table">
-                                    <table class="table table-bordered text-center">
-                                        <thead>
-                                            <tr>
-                                                <th>Thématique</th>
-                                                <th>Département</th>
-                                                <th>Quantité</th>
-                                                <th>Date livraison</th>
-                                                <th>Statut</th>
-                                                <th>Télécharger</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach($commandes as $commande)
+                                    <h6 class="title mb-4">Commandes</h6>
+                                    <div class="wrap-table" >
+                                        <table class="table table-bordered text-center">
+                                            <thead>
                                                 <tr>
-                                                    <td>{{ $commande->thematique }}</td>
-                                                    <td>{{ $commande->departement }}</td>
-                                                    <td>{{ $commande->nombre_leads }}</td>
-                                                    <td>{{ \Carbon\Carbon::parse($commande->date_livraison)->format('d/m/Y') }}</td>
-                                                    <td>
-                                                        @if($commande->statut === 1)
-                                                            <span class="text-success">Accepté</span>
-                                                        @elseif($commande->statut === 0)
-                                                            <span class="text-danger">Refusé</span>
-                                                        @else
-                                                            <span class="text-warning">En cours</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>
-                                                        @if($commande->statut === 1 && !empty($commande->excel_path) && !is_null($commande->excel_path))
-                                                            <a role="button" class="btn btn-secondary btn-sm" href="{{ route('marketplace.client-commande-download', $commande->id) }}" >Télécharger</a>
-                                                        @else
-                                                            <button class="btn btn-secondary btn-sm" disabled>Télécharger</button>
-                                                        @endif
-                                                    </td>
+                                                    <th>Thématique</th>
+                                                    <th>Département</th>
+                                                    <th>Quantité</th>
+                                                    <th>Date livraison</th>
+                                                    <th>Statut</th>
+                                                    <th>Télécharger</th>
                                                 </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($commandes as $commande)
+                                                    <tr>
+                                                        <td>{{ $commande->thematique }}</td>
+                                                        <td>{{ $commande->departement }}</td>
+                                                        <td>{{ $commande->nombre_leads }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($commande->date_livraison)->format('d/m/Y') }}</td>
+                                                        <td>
+                                                            @if($commande->statut === 1)
+                                                                <span class="text-success">Accepté</span>
+                                                            @elseif($commande->statut === 0)
+                                                                <span class="text-danger">Refusé</span>
+                                                            @else
+                                                                <span class="text-warning">En cours</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>
+                                                            @if($commande->statut === 1 && !empty($commande->excel_path) && !is_null($commande->excel_path))
+                                                                <a role="button" class="btn btn-secondary btn-sm" href="{{ route('marketplace.client-commande-download', $commande->id) }}" >Télécharger</a>
+                                                            @else
+                                                                <button class="btn btn-secondary btn-sm" disabled>Télécharger</button>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
                                     </div>
 
                                 </div>

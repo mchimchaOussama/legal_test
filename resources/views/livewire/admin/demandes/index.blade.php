@@ -8,6 +8,10 @@
         COMMANDES
     @endsection
 
+    @section("navbar-element")
+    <input type="text" class="border-0 search-navbar"  class="border-0" placeholder="Rechercher..." id="custom-search">
+    @endsection
+
     <div class="card">
         <div class="card-body py-1 px-0 overflow-auto">
 
@@ -88,7 +92,7 @@
                             </td>
                             <td>
                                 <a href="#" title="Détails" class="details" wire:click="commande_detail({{ $commande->id }})">
-                                    <i class="fa-solid fa-pen-to-square fa-lg text-secondary mr-1"></i>
+                                    <i class="fa-regular fa-clipboard fa-lg text-secondary mr-1"></i>
                                 </a>
                                 <a href="#" title="Supprimer" wire:click="supprimer_commande({{ $commande->id }})">
                                     <i class="fa-solid fa-trash-can fa-lg text-danger"></i>

@@ -3,16 +3,17 @@
 namespace App\Livewire\Admin\Thematique;
 
 use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Thematique;
 use Livewire\Attributes\On;
 use Livewire\WithFileUploads;
+use Livewire\WithPagination;
+
 
 
 class Index extends Component
 {
 
-    use WithFileUploads;
+    use WithFileUploads, WithPagination;
 
     public $thematique;
     public $business_type;
@@ -25,6 +26,7 @@ class Index extends Component
     public $upload_thematique_image;
     public $theme;
     public $new_theme;
+    public $results= [], $search = "";
 
 
     public function supprimer_image()
@@ -46,7 +48,7 @@ class Index extends Component
         $this->validate(
             [ 
                 'theme'             => 'required',
-                'thematique'        => 'required|min:3|max:30',
+                'thematique'        => 'required|min:3',
                 'business_type'     => 'required|min:3|max:3|in:B2B,B2C',
             ],
             [
@@ -80,6 +82,7 @@ class Index extends Component
         return $this->dispatch('toast-success');
 
     }
+
 
     //////////// Supprimer ////////////
     public function delete_thematique($id){
@@ -130,7 +133,7 @@ class Index extends Component
 
         $this->validate(
             [
-                'new_thematique'      => 'required|min:3|max:30',
+                'new_thematique'      => 'required|min:3',
                 'new_type_business'   => 'required|in:B2B,B2C',
             ],
             [
@@ -147,12 +150,19 @@ class Index extends Component
         {
 
             $old_image = Thematique::where("id", $this->modified_id)->first()->image;
-
+/*
             if(!empty($old_image))
             {
-                unlink(storage_path("app/public/".$old_image));
-            }
 
+                try{
+                    unlink(storage_path("app/public/".$old_image));
+                }catch(Exception $e)
+                {
+                    //
+                }
+                
+            }
+*/
             $path = $this->upload_thematique_image->store("uploads", "public");
 
             $data["image"]  = $path;
@@ -176,10 +186,41 @@ class Index extends Component
 
 
 
+    #[On("search")]
+    public function search($value)
+    {
+
+        $value = trim($value," ");
+
+        if(!empty($value))
+        {
+            
+            $this->results = Thematique::withCount("leads")
+                                            ->where("thematique", "like", "%$value%")
+                                            ->orWhere("theme", "like", "%$value%")
+                                            ->orWhere("type", "like", "%$value%")
+                                            ->get();
+            
+        }else{
+            $this->results = [];
+        }
+        
+    }
+
+
+
     public function render()
     {
-        return view('livewire.admin.thematique.index',[
-            'thematiques' => Thematique::withCount("leads")->latest()->paginate(10),
-        ]);
+        
+        if(sizeof($this->results) > 0)
+        {
+            $thematiques = $this->results;
+        }
+        else{
+            $thematiques = Thematique::withCount("leads")->latest()->paginate(10);
+        }
+
+        return view('livewire.admin.thematique.index', compact("thematiques"));
+        
     }
 }

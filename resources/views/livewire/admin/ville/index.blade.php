@@ -12,6 +12,10 @@
         <button role="button" class="btn btn-primary px-2 add-modal">Ajouter une Ville</button>
     @endsection
 
+    @section("navbar-element")
+        <input type="text" class="border-0 search-navbar" id="custom-search"  class="border-0" placeholder="Rechercher...">
+    @endsection
+
 
     <div class="card">
         <div class="card-body py-1 px-0">

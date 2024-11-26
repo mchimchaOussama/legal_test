@@ -65,7 +65,9 @@ class Lead extends Model
         'telephonMobile',
         'typeServicesRecherche',
         'DatChangementOperateur',
-        'commentaireParticulier'
+        'commentaireParticulier',
+        "client_id",
+        "commande"
     ];
     
 
@@ -133,6 +135,11 @@ class Lead extends Model
     }
 
 
+    public function commande()
+    {
+        return $this->hasOne(Commande::class);
+    }
     
 
+    
 }

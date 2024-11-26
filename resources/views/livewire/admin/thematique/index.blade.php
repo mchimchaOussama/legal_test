@@ -5,7 +5,11 @@
     @endsection
 
     @section("page-title")
-    THÉMATIQUES
+        THÉMATIQUES
+    @endsection
+
+    @section("navbar-element")
+        <input type="text" class="border-0 search-navbar"  class="border-0" placeholder="Rechercher..." id="custom-search">
     @endsection
 
     @section("element")
@@ -15,7 +19,7 @@
 
     <div class="card">
         <div class="card-body py-1 px-0">
-
+            
             <table class="custom-table w-100">
                 <thead>
                     <th>Thématique</th>
@@ -34,7 +38,13 @@
 
                             @foreach($thematiques as $index => $thematique)
                                 <tr>
-                                    <td>{{ $thematique->theme }}</td>
+                                    <td>
+                                        @if ($thematique->theme == 'enr')
+                                        energie gaz /électrique
+                                        @else
+                                        {{ $thematique->theme }}
+                                        @endif
+                                    </td>
                                     <td>{{ $thematique->thematique }}</td>
                                     <td>{{ $thematique->type }}</td>
 
@@ -59,7 +69,38 @@
               <!-- Pagination Links -->
               <div class="d-flex  mt-1 mx-2">
                   <div class="btn-group" role="group">
-                      {{ $thematiques->links('pagination::bootstrap-4') }}
+
+                    <div class="w-100 mt-1 mb-2">
+
+                        @if($thematiques instanceof \Illuminate\Pagination\LengthAwarePaginator)
+                            <span class="text-secondary me-1">Pages:</span>
+
+                            @php
+
+                                $pagination_start = $thematiques->currentPage() - 2;
+                                if($pagination_start <= 0) $pagination_start = 1;
+
+                                $pagination_end   = $thematiques->currentPage() + 2;
+                                if($pagination_end > $thematiques->lastPage()) $pagination_end = $thematiques->lastPage();
+
+                            @endphp
+
+                            <a type="button" class="btn btn-outline-secondary btn-sm" href="?page=1" wire:navigate title="Première page">
+                                <
+                            </a>
+                            @for($p=$pagination_start; $p <= $pagination_end; $p++)
+                                <a type="button" class="btn @if($thematiques->currentPage() == $p) btn-secondary @else btn-outline-secondary @endif btn-sm" href="?page={{ $p }}" wire:navigate>
+                                    {{ $p }}
+                                </a>
+                            @endfor
+                            <a type="button" class="btn btn-outline-secondary btn-sm" href="?page={{ $thematiques->lastPage() }}" wire:navigate title="Dernière page">
+                                >
+                            </a>
+
+                        @endif
+
+                    <div>
+                    
                   </div>
               </div>
           </div>

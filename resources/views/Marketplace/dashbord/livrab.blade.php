@@ -48,7 +48,7 @@
                                 <!-- Logo Box -->
                                 <div class="logo-box">
                           <!--<div class="logo"><a href="index.html"><img src="images/logo/logo%402x.png" alt="logo" width="174" height="44"></a></div> -->   
-                                    <a class="navbar-brand ms-5" href="/">
+                                    <a class="navbar-brand ms-5" href="{{ url('/') }}">
                                         <img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44" alt="logo"  />
                                     </a>
                                 </div>
@@ -60,28 +60,25 @@
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
                                                 </li>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
 
-                                                <li class="current"><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
 
-                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a>
-                                                </li>
-
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
 
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class=""><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
                                                 @if(session()->has('client_hom'))
@@ -89,7 +86,13 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
+                                                        <li class="nav-menu-item">
+                                                            <a class="nav-menu-link" href="{{ url('/dashboard/commandes') }}">
+                                                                <span class="icon icon-list-dashes"></span>
+                                                                Commandes
+                                                            </a>
+                                                        </li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -440,14 +443,14 @@
                                 <div class="col-md-6">
                                         <div class="inner-box">
                                             <span class="label">Thematique:</span>
-                                            <div class="content fw-7">{{$payment->thematique->thematique}}</div>
+                                            <div class="content fw-7">@if ($payment->thematique->theme == 'enr' ) energie gaz /électrique @endif  </div>
                                         </div>
                                     </div>
 
                                     <div class="col-md-6">
                                         <div class="inner-box">
                                             <span class="label">Sous Thematique:</span>
-                                            <div class="content fw-7">{{$payment->thematique->theme}}</div>
+                                            <div class="content fw-7">{{$payment->thematique->thematique}}</div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -722,9 +725,8 @@
                                     </div>
                                 </div>
                             </div>
-                            @endif
-    <!----------------------------------------------------------------------------------------------------------------------------------------------------------------->
-    
+                        @endif
+
 
                         </div>
                         <div class="col-lg-4">

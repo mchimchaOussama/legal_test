@@ -57,25 +57,25 @@
     </div>
     </div>
     </div>
-     </div>
+    </div>
 
-     <script>
+    <script>
         
         function fetchInvoiceDetails(invoiceId) {
-    $.ajax({
-        url: "{{ route('fetchInvoiceDetails') }}",
-        method: "GET",
-        data: { invoice_id: invoiceId },
-        success: function(response) {
-            $('#modal-body-' + invoiceId).html(response.html);
-        },
-        error: function() {
-            $('#modal-body-' + invoiceId).html('Error loading details. Please try again.');
+            $.ajax({
+                url: "{{ route('fetchInvoiceDetails') }}",
+                method: "GET",
+                data: { invoice_id: invoiceId },
+                success: function(response) {
+                    $('#modal-body-' + invoiceId).html(response.html);
+                },
+                error: function() {
+                    $('#modal-body-' + invoiceId).html('Error loading details. Please try again.');
+                }
+            });
         }
-    });
-}
 
-</script>
+    </script>
 
 
 

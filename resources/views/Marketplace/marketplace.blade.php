@@ -90,28 +90,25 @@
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
                                                 </li>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
 
-                                                <li class="current"><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
 
-                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a>
-                                                </li>
-
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
 
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
-
-                                                <li class="a"><a href="{{route('marketplace.demandes')}}">
-                                                Commandez en Quantité
-                                                </a></li>
-
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
                                                 <li class=""><a href="{{route('get.contact')}}">Contact</a>
                         
                                                 @if(session()->has('client_hom'))
@@ -119,7 +116,7 @@
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -145,9 +142,9 @@
                                         @if(session()->has('client_hom'))
                                             
                                             @else
-                                                <li><a href="#modalLogin" data-bs-toggle="modal">Login</a></li>
+                                                <li><a href="#modalLogin" data-bs-toggle="modal">Se connecter</a></li>
                                                 <li>/</li>
-                                                <li><a href="#modalRegister" data-bs-toggle="modal">Register</a></li>
+                                                <li><a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a></li>
                                             @endif
                                         </ul>
                                         @if (session('cart') && count(session('cart')) > 0)
@@ -181,9 +178,9 @@
                         
                         <div class="bottom-canvas">
                             <div class="login-box flex align-items-center">
-                                <a href="#modalLogin" data-bs-toggle="modal">Login</a>
+                                <a href="#modalLogin" data-bs-toggle="modal">Se connecter</a>
                                 <span>/</span>
-                                <a href="#modalRegister" data-bs-toggle="modal">Register</a>
+                                <a href="#modalRegister" data-bs-toggle="modal">S'inscrire</a>
                             </div>
                             <div class="menu-outer"></div>
                             <div class="button-mobi-sell">
@@ -209,7 +206,7 @@
             <section class="flat-section flat-benefit bg-surface">
                 <div class="container">
                     <div class="box-title text-center wow fadeInUpSmall" data-wow-delay=".2s" data-wow-duration="2000ms">
-                        <div class="text-subtitle text-primary">La place de marché 100% Lead !</div>
+                        <div class="text-subtitle text-primary">La marketplace 100% dédiée aux leads !</div>
                         <h4 class="mt-4">Filtrer par département, par thématique, et choisissez !</h4>
                     </div>
                     <div class="wrap-benefit wow fadeInUpSmall" data-wow-delay=".2s" data-wow-duration="2000ms">
@@ -294,21 +291,33 @@
                                                 @csrf
                                                 <div class="wd-filter-select">
                                                     <div class="inner-group inner-filter">
+
                                                         <div class="form-style">
                                                             <label>Thematique</label>
                                                             <div class="group-select">
-                                                                <select class='form-select no-border' name="thematique_id" id="thematiqueSelect" >
+                                                                <select class='form-select no-border' name="thematiqueArray" id="thematiqueSelectArray"  onchange="filterSousThematiques()" >
                                                                     <option value=''>Tout</option>
-                                                                    @foreach($thematiquesFurstSlideSherchs as $thematiquesFurstSlideSherch)
-                                                                        <option value="{{ $thematiquesFurstSlideSherch->id }}" 
-                                                                            {{ session('thematique_id') == $thematiquesFurstSlideSherch->id ? 'selected' : '' }}>
-                                                                            {{ $thematiquesFurstSlideSherch->thematique }}
+                                                                    @foreach($thematiqueArrays as $thematiqueArray)
+                                                                        <option value="{{$thematiqueArray}}" 
+                                                                            {{ session('thematiqueArray') == $thematiqueArray ? 'selected' : '' }}>
+                                                                          @if  ($thematiqueArray == 'enr') energie gaz /électrique  @else {{ $thematiqueArray }} @endif
                                                                         </option>
                                                                     @endforeach     
                                                                 </select>
                                                             </div>                                                    
                                                         </div>
 
+                                                
+                                                        <div class="form-style">
+                                                            <label>Sous Thematique</label>
+                                                            <div class="group-select">
+                                                                <select class="form-select no-border" id="thematiqueSelect" name='thematiqueSelect'>
+                                                                    <option value="">Tout</option>
+                                                                    <!-- Les sous-thématiques seront filtrées dynamiquement -->
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    
                                                         <div class="form-style">
                                                             <label>Departement</label>
                                                             <div class="group-select">
@@ -360,7 +369,7 @@
                                                         -->
 
                                                         <div class="form-style">
-                                                            <button type="submit" class="tf-btn primary">Recherche</button>
+                                                            <button type="submit" class="tf-btn primary">Rechercher</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -505,7 +514,7 @@
                                                             </ul>
                                                         </div>
                                                         <div class="bottom">
-                                                            <span class="flag-tag success style-2">{{$leadAll->thematique->theme}}</span>
+                                                            <span class="flag-tag success style-2">@if ( $leadAll->thematique->theme == 'enr' ) energie gaz /électrique @else {{$leadAll->thematique->theme}} @endif   </span>
                                                         </div>
                                                     </a>
                                                     <div class="content">
@@ -1052,7 +1061,7 @@
                             <div class="fw-7 text-white">Top Thematique</div>
                             <ul class="mt-10 navigation-menu-footer">
                                 @foreach($thematiquesStatistiques as $thematiquesStatistique)
-                                <li> <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">{{$thematiquesStatistique->theme}}</a> </li>
+                                <li>  <a href="{{route('get.marketplace')}}" class="caption-1 text-variant-2">@if ($thematiquesStatistique->theme =='enr' )  energie gaz /électrique @else {{$thematiquesStatistique->theme}} @endif </a>  </li>
                                 @endforeach
                                
                             </ul>
@@ -1618,6 +1627,14 @@
         </div>
     </div>
 </div>
+
+
+<script>
+    const sousThematiques = {!! $thematiquesFurstSlideSherchs->toJson() !!};
+    const selectedThematique = "{{ session('thematiqueArray') }}"; // La thématique sélectionnée dans la session
+    const selectedSousThematique = "{{ session('thematique_id') }}"; // Sous-thématique sélectionnée
+</script>
+
 
 <script>
 

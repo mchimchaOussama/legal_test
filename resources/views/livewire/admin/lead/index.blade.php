@@ -14,7 +14,7 @@
         <select class='form-control text-center btn btn-primary d-inline-block' onchange="window.location.href=this.value;" style="width:150px">
             <option value="" class='bg-white text-dark' disabled selected>Ajouter</option>
             <option value="{{ route('admin.lead-ajouter-telecom') }}" class='bg-white text-dark'><a href="#" wire:navigate>Telecom</a></option>
-            <option value="{{ route('admin.lead-ajouter-enr') }}" class='bg-white text-dark'> <a href="#" wire:navigate> Enr </a></option>
+            <option value="{{ route('admin.lead-ajouter-enr') }}" class='bg-white text-dark'> <a href="#" wire:navigate> energie gaz /électrique </a></option>
             <option value="{{ route('admin.lead-ajouter') }}" class='bg-white text-dark'> <a href="#" wire:navigate> Enr Renouvelables</a></option>
             <optgroup label="Formation" class='bg-white text-dark'>
                 <option value="{{ route('admin.lead-ajouter-informatique-b2b') }}" class='bg-white text-dark' wire:navigate>B2B</option>

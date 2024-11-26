@@ -37,7 +37,7 @@
                                 <div class="inner-container d-flex justify-content-between align-items-center">
                                     <!-- Logo Box -->
                                     <div class="logo-box d-flex">
-                                        <div class="logo">  <a class="navbar-brand ms-5" href="index.html"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
+                                        <div class="logo">  <a class="navbar-brand ms-5" href="{{ url('/') }}"><img src="{{ asset('assetsMarketplace/images/logo.png') }}"  width="174" height="44"     alt="logo"  /></a></div>
                                         <div class="button-show-hide">
                                             <span class="icon icon-categories"></span>
                                         </div>
@@ -49,26 +49,33 @@
                                                 <ul class="navigation clearfix">
                                                 <li class=" home "><a href="{{route('get.home')}}">Accueil</a>
 
-                                                <li class="dropdown2"><a href="#">Thematique</a>
+                                                <li class="dropdown2"><a href="{{route('get.marketplace')}}">Thematique</a>
                                                     <ul>
                                                         @foreach($thematiques as $thematique)
-                                                        <li><a href="{{route('get.marketplace')}}">{{$thematique->thematique}}</a></li>
+                                                        <li><a href="{{route('get.marketplace')}}">@if ($thematique->theme == 'enr' ) gaz /électrique  @else {{$thematique->theme}} @endif  </a></li>
                                                         @endforeach
                                                     </ul>
                                                 </li>
-                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a>
-                                                </li>
-                                                <li class=""><a href="#">A Propos</a>
-                                                </li>
+
+                                                <li class=""><a href="{{route('get.marketplace')}}">Marketplace</a></li>
+
+                                                <li class=""><a href="{{route('get.about_us')}}">A Propos</a></li>
+
                                                 <li class=""><a href="{{route('get.faq')}}">FAQ</a>
                                                 </li>
+                                                @if(session()->has('client_hom'))
+                                                    <li class=""><a href="{{route('marketplace.demandes')}}">
+                                                    Commandez en Quantité
+                                                    </a></li>
+                                                @endif
+                                                <li class=""><a href="{{route('get.contact')}}">Contact</a>
                                                     
                                                 @if(session()->has('client_hom'))
 
                                                 <li class="dropdown2"><a href="#">Bienvenue, {{ session('client_hom')->nom }}</a>
                                                     <ul>
                                                         <li><a href="{{route('get.dashbord.client')}}">Dashboard</a></li>   
-                                                        <li><a href="{{route('get.register.marketplace')}}">Profile</a></li>
+                                                        <li><a href="{{route('get.register.marketplace')}}">Profil</a></li>
                                                         <li> 
                                                         <a href="#">
                                                         <form action="{{ route('logout') }}" method="POST" style="display: inline;">
@@ -125,16 +132,24 @@
                         </nav>                
                     </div>
                     <!-- End Mobile Menu -->
-                
                 </header>
                 <!-- end header -->
                 <!-- sidebar dashboard -->
                 <div class="sidebar-menu-dashboard">
                     <ul class="box-menu-dashboard">
-                        <li class="nav-menu-item active"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboards</a></li>
-                        <li class="nav-menu-item "><a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-profile"></span> My Profile</a></li>
-                        <li class="nav-menu-item "><a class="nav-menu-link" href="{{route('marketplace.client-commandes')}}"><span class="icon icon-package"></span>Commandes</a></li>
-                        <li class="nav-menu-item "><a class="nav-menu-link" href="{{ route('logout') }}"><span class="icon icon-sign-out"></span> Logout</a></li>
+                        <li class="nav-menu-item active"><a class="nav-menu-link" href="{{route('get.dashbord.client')}}"><span class="icon icon-dashboard"></span> Dashboard</a></li>
+                        <li class="nav-menu-item">
+                            <a class="nav-menu-link" href="{{route('get.register.marketplace')}}"><span class="icon icon-profile"></span>Profil</a>
+                        </li>
+                        <li class="nav-menu-item">
+                            <a class="nav-menu-link" href="{{route('dashboard.client-commandes')}}">
+                                <span class="icon icon-list-dashes"></span>
+                                Commandes
+                            </a>
+                        </li>
+                        <li class="nav-menu-item">
+                            <a class="nav-menu-link" href="{{ route('logout') }}"><span class="icon icon-sign-out"></span> Déconnecter</a>
+                        </li>
                     </ul>
                 </div>
                 <!-- end sidebar dashboard -->
@@ -149,7 +164,7 @@
                                     <span class="icon icon-list-dashes"></span>
                                 </div>
                                 <div class="content-box">
-                                    <div class="title-count">Lead acheter  </div>
+                                    <div class="title-count">Lead acheter</div>
                                     <div class="d-flex align-items-end">
                                         <h6 class="number" data-speed="2000" data-to="17" data-inviewport="yes">{{$statLead}}</h6>                                   
                                     </div>                              
@@ -193,6 +208,48 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+                        <div class="wrapper-content row">
+                            <div class="col-xl-12">
+                                <div class="widget-box-2 wd-listing">
+                                    <h6 class="title">Commandes</h6>
+
+                                    <div class="wrap-table w-100 overflow-auto">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Thématique</th>
+                                                    <th>Département</th>
+                                                    <th>Quantité</th>
+                                                    <th>Date Livraison</th>
+                                                    <th>Prix</th>
+                                                    <th>Acheter</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach($commandes as $commande)
+                                                    <tr>
+                                                        <td>{{ $commande->thematique }}</td>
+                                                        <td>{{ $commande->departement }}</td>
+                                                        <td>{{ $commande->nombre_leads }}</td>
+                                                        <td>{{ \Carbon\Carbon::parse($commande->date_livraison)->format("d/m/Y") }}</td>
+                                                        <td>{{ $commande->prix }}</td>
+                                                        <td><a  href="{{ url('/marketplace/detai') }}/{{ $commande->lead_id }}" class="btn btn-outline-danger btn-sm">Acheter</a></td>
+                                                    </tr>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
                         <div class="wrapper-content row">
                             <div class="col-xl-12">
                                 <div class="widget-box-2 wd-listing">
@@ -284,71 +341,70 @@
 
 
 
-<script>
-$(document).ready(function() {
-    // Function to load leads based on filters
-    function loadLeads() {
-        // Get filter values
-        const departement = $('#departement').val();
-        const thematique = $('#thematique').val();
-        const type = $('#type').val();
+    <script>
+        $(document).ready(function() {
 
-        // AJAX request to fetch leads
-        $.ajax({
-            url: '/fetch-leads',
-            type: 'POST',
-            data: {
-                departement: departement,
-                thematique: thematique,
-                type: type,
-                _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
-            },
-            success: function(response) {
-                // Populate the leads container with the table HTML from the server
-                $('#leads-container').html(response.html);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching leads:', error);
+            function loadLeads() {
+
+                const departement = $('#departement').val();
+                const thematique = $('#thematique').val();
+                const type = $('#type').val();
+
+                // AJAX request to fetch leads
+                $.ajax({
+                    url: '/fetch-leads',
+                    type: 'POST',
+                    data: {
+                        departement: departement,
+                        thematique: thematique,
+                        type: type,
+                        _token: $('meta[name="csrf-token"]').attr('content') // CSRF token
+                    },
+                    success: function(response) {
+                        // Populate the leads container with the table HTML from the server
+                        $('#leads-container').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching leads:', error);
+                    }
+                });
             }
+
+            // Load leads on page load
+            loadLeads();
+
+            // Reload leads when any filter changes
+            $('#departement, #thematique, #type').on('change', function() {
+                loadLeads();
+            });
+
+            // Handle pagination
+            $(document).on('click', '.pagination a', function(e) {
+                e.preventDefault();
+                
+                var url = $(this).attr('href');
+                
+                // Re-run the AJAX request for the new page
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    data: {
+                        departement: $('#departement').val(),
+                        thematique: $('#thematique').val(),
+                        type: $('#type').val(),
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        // Update the leads table with the new data
+                        $('#leads-container').html(response.html);
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Error fetching leads:', error);
+                    }
+                });
+            });
         });
-    }
-
-    // Load leads on page load
-    loadLeads();
-
-    // Reload leads when any filter changes
-    $('#departement, #thematique, #type').on('change', function() {
-        loadLeads();
-    });
-
-    // Handle pagination
-    $(document).on('click', '.pagination a', function(e) {
-        e.preventDefault();
-        
-        var url = $(this).attr('href');
-        
-        // Re-run the AJAX request for the new page
-        $.ajax({
-            url: url,
-            type: 'GET',
-            data: {
-                departement: $('#departement').val(),
-                thematique: $('#thematique').val(),
-                type: $('#type').val(),
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            success: function(response) {
-                // Update the leads table with the new data
-                $('#leads-container').html(response.html);
-            },
-            error: function(xhr, status, error) {
-                console.error('Error fetching leads:', error);
-            }
-        });
-    });
-});
-
-</script>
+    </script>
 
 <!-- Mirrored from themesflat.co/html/homzen/my-invoices.html by HTTrack Website Copier/3.x [XR&CO'2014], Mon, 14 Oct 2024 22:36:10 GMT -->
 </html>
